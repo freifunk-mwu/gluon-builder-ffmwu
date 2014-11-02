@@ -1,0 +1,39 @@
+common:
+    branches:
+        avail:
+            # branch: [gluon-tag, site-tag]
+            experimental:   [false, false]
+            beta:           [true, false]
+            stable:         [true,  true]
+        build: stable
+        noarg: experimental
+    communities:
+    - mz
+    - wi
+    pycmd: 'python3'
+    mkcmd: 'make -j7 V=sss'
+gluon:
+    remote: 'https://github.com/freifunk-gluon/gluon.git'
+    local:
+        # dir: &L_DIR !loc_join ['home_dir', 'gluon_builder']
+        dir: &L_DIR !loc_join ['home_dir', 'Desktop', 'gluon_builder']
+        mz: &B_MZ !loc_join [*L_DIR, 'mz']
+        wi: &B_WI !loc_join [*L_DIR, 'wi']
+site:
+    remote: 'https://github.com/freifunk-mwu/site-ffmwu.git'
+    local:
+        mz: !loc_join [*B_MZ, 'site']
+        wi: !loc_join [*B_WI, 'site']
+publish:
+    autosign_key: !loc_join ['home_dir', '.ecdsa', !str_join ['hostname', '.prv']]
+    # http_root_dir: &H_DIR !loc_join ['/var/www/html/gluon/']
+    http_root_dir: &H_DIR !loc_join ['home_dir', 'Desktop/gluon_http/']
+    archive_dir: !loc_join [*H_DIR, '_archive']
+prepare:
+    bconf:
+        out: !loc_join ['call_dir', 'bconf']
+        tpl: !loc_join ['call_dir', 'common', 'bconf.tpl']
+    stage_dir: &S_DIR !loc_join [*H_DIR, '_stage']
+    image_dirs:
+        mz: !loc_join [*S_DIR, 'images', 'mz']
+        wi: !loc_join [*S_DIR, 'images', 'wi']
