@@ -42,7 +42,7 @@ def trip_manifest(branch, manifest):
                 cmdd=dict(cmd='ln -s manifest %s' %(path.basename(ml)), cwd=path.dirname(ml))
             )
 
-    p.m('trip_manifest written', more=dict(branch=branch), verbose=True)
+        p.m('trip_manifest written', more=dict(branch=branch), verbose=True)
 
 if __name__ == '__main__':
     a = args()

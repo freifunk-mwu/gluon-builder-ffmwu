@@ -45,7 +45,7 @@ for C in $COMMUNITIES; do
 
     mkdir -p "$ODIR/${C}" 2>&1 | $LOG
     cp -r images "$ODIR/${C}/" 2>&1 | $LOG
-    cp -r "$STAGEDIR/*" $ODIR 2>&1 | $LOG
+    cp -r "$STAGEDIR/\*" $ODIR 2>&1 | $LOG
 
 done
 

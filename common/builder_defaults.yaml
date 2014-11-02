@@ -25,8 +25,9 @@ site:
         wi: !loc_join [*B_WI, 'site']
 publish:
     autosign_key: !loc_join ['home_dir', '.ecdsa', !str_join ['hostname', '.prv']]
-    http_root_dir: &H_DIR !loc_join ['/var/www/html/firmware/']
-    archive_dir: !loc_join [*H_DIR, '_archive']
+    http_root_dir: &H_DIR !loc_join ['/var/www/html']
+    http_fw_dir: &F_DIR !loc_join [*H_DIR, 'firmware']
+    archive_dir: !loc_join [*F_DIR, '_archive']
 prepare:
     bconf:
         out: !loc_join ['call_dir', 'bconf']
