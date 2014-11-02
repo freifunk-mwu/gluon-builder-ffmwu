@@ -2,22 +2,22 @@
 from os import path
 DEFAULTS = path.join(path.dirname(__file__), 'builder_defaults.yaml')
 
-def pinit(mname, clean=False):
+def pinit(mname, clean=False, verbose=True):
 
     from photon import Photon
     from photon.util.locations import search_location
 
-    p = Photon(DEFAULTS, config=None, meta='builder_%s_meta.json' %(mname), verbose=True)
+    p = Photon(DEFAULTS, config=None, meta='builder_%s_meta.json' %(mname), verbose=verbose)
     s = p.settings.get
 
     p.meta.stage(search_location('builder_meta.json', create_in=s['prepare']['stage_dir']), clean=clean)
     return p, s
 
-def sinit():
+def sinit(verbose=False):
 
     from photon import Settings
 
-    return Settings(DEFAULTS, config=None, verbose=True).get
+    return Settings(DEFAULTS, config=None, verbose=verbose).get
 
 def ginit(p, c='wi'):
 

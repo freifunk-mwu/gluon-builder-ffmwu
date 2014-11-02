@@ -9,8 +9,8 @@ def args():
 def mlog(msg):
     from common import pinit
 
-    p, s = pinit('build_logger')
-    p.m(msg)
+    p, s = pinit('build_logger', verbose=False)
+    p.m(msg, verbose=True)
 
 if __name__ == '__main__':
     a = args()
