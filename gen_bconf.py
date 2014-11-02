@@ -22,6 +22,7 @@ def gen_bconf(branch):
                 autosign_key=s['publish']['autosign_key'],
                 build_branch=s['common']['branches']['build'],
                 build_dir=s['gluon']['local']['dir'],
+                callbranch=branch,
                 communities=' '.join(sample(s['common']['communities'], len(s['common']['communities']))),
                 mkcmd=s['common']['mkcmd'],
                 priority=priority,

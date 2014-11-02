@@ -20,7 +20,7 @@ def prepare(branch):
 
         p.m('generating site for %s' %(community), cmdd=dict(cmd='%s generate.py %s --nomodules' %(s['common']['pycmd'], community), cwd=s['site']['local'][community]), verbose=True)
 
-    gen_bconf()
+    gen_bconf(branch)
 
 if __name__ == '__main__':
     from common import branch_args
