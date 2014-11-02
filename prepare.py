@@ -1,14 +1,4 @@
-
-def args():
-    from argparse import ArgumentParser
-    from common import sinit
-
-    s = sinit()
-
-    a = ArgumentParser(prog='gluon_builder', description='you must specify a branch', epilog='-.-', add_help=True)
-    a.add_argument('--branch', '-b', action='store', choices=s['common']['branches']['avail'].keys(), default=s['common']['branches']['noarg'])
-    return a.parse_args()
-
+#!/usr/bin/env python3
 
 def prepare(branch):
     from common import pinit, ginit
@@ -16,6 +6,7 @@ def prepare(branch):
     from gen_bconf import gen_bconf
 
     p, s = pinit('prepare', clean=True)
+
     for community in s['common']['communities']:
         change_location(s['gluon']['local'][community], False, move=True)
         tags = s['common']['branches']['avail'][branch]
@@ -32,6 +23,7 @@ def prepare(branch):
     gen_bconf()
 
 if __name__ == '__main__':
-    a = args()
+    from common import branch_args
+    a = branch_args()
 
     prepare(a.branch)

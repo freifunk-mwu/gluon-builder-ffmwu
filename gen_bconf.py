@@ -1,6 +1,7 @@
 
-def gen_bconf():
+def gen_bconf(branch):
     from os import path
+    from random import sample
     from photon.util.system import get_timestamp
     from common import pinit, ginit
 
@@ -8,9 +9,11 @@ def gen_bconf():
 
     if p.settings.load('siteconf', path.join(s['site']['local']['wi'], 'meta.yaml')):
 
-        priority, release = s['siteconf']['site']['gluon_priority'], s['siteconf']['site']['gluon_release_num']
+        priority, version = s['siteconf']['site']['gluon_priority'], s['siteconf']['site']['gluon_release_num']
         gluon, site = ginit(p)
-        release = '%s-%s-g_%s-s_%s' %(release, get_timestamp(), gluon.short_commit, site.short_commit)
+
+
+        release = '%s-%s-g_%s-s_%s' %(version, get_timestamp(), gluon.short_commit, site.short_commit)
 
         bconf = p.template_handler(
             s['prepare']['bconf']['tpl'],
@@ -19,7 +22,7 @@ def gen_bconf():
                 autosign_key=s['publish']['autosign_key'],
                 build_branch=s['common']['branches']['build'],
                 build_dir=s['gluon']['local']['dir'],
-                communities=' '.join(s['common']['communities']),
+                communities=' '.join(sample(s['common']['communities'], len(s['common']['communities']))),
                 mkcmd=s['common']['mkcmd'],
                 priority=priority,
                 pycmd=s['common']['pycmd'],
@@ -33,4 +36,7 @@ def gen_bconf():
 
 
 if __name__ == '__main__':
-    gen_bconf()
+    from common import branch_args
+    a = branch_args()
+
+    gen_bconf(a.branch)

@@ -27,3 +27,12 @@ def ginit(p, c='wi'):
     site = p.git_handler(s['site']['local'][c], remote_url=s['site']['remote'])
 
     return gluon, site
+
+def branch_args():
+    from argparse import ArgumentParser
+
+    s = sinit()
+
+    a = ArgumentParser(prog='gluon_builder', description='you must specify a branch', epilog='-.-', add_help=True)
+    a.add_argument('--branch', '-b', action='store', choices=s['common']['branches']['avail'].keys(), default=s['common']['branches']['noarg'])
+    return a.parse_args()
