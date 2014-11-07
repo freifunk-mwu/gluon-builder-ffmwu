@@ -37,9 +37,12 @@ for C in $COMMUNITIES; do
     $LOGP "~ ${C}_$RELEASE ~ sign ($AUTOSIGNKEY images/sysupgrade/$CALLBRANCH.manifest)" 2>&1 | $LOG
     "$WDIR/contrib/sign.sh" $AUTOSIGNKEY "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
 
-    $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -s "$WDIR/contrib/sign.sh"
-
     $LOGP "~ ${C}_$RELEASE ~ appendix" 2>&1 | $LOG
+    $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -c "$WDIR/scripts/sha512sum.sh"
+
+    for g in "$WDIR/images/*/*"; do echo "$(scripts/sha512sum.sh $g) $g" >> $SUMS; done
+    "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
+
     mkdir -p "$ARCHIVEDIR/${C}" 2>&1 | $LOG
     cp -rv images "$ARCHIVEDIR/${C}/" 2>&1 | $LOG
     gzip $LOGF

@@ -4,10 +4,10 @@ def args():
 
     a = ArgumentParser(prog='gluon_builder_gen_info', description='do not launch manually', epilog='builder.sh needs this while building', add_help=True)
     a.add_argument('--images', '-i', action='store', required=True, help='The images folder')
-    a.add_argument('--sign', '-s', action='store', help='The sign executable')
+    a.add_argument('--checksum', '-c', action='store', help='The checksum executable')
     return a.parse_args()
 
-def gen_info(images, sign):
+def gen_info(images, checksum):
     from os import path, listdir
     from photon.util.files import read_json, write_json
     from common import pinit
@@ -22,7 +22,7 @@ def gen_info(images, sign):
         if info and path.exists(im):
             for iname in listdir(im):
                 model = iname.split('%s-' %(info['_info']['release']))[-1].split('-%s.bin' %(sp))[0]
-                checksum = p.m('signing %s' %(model), cmdd=dict(cmd='%s %s %s' %(path.abspath(sign), s['publish']['autosign_key'], path.join(im, iname)))).get('out')
+                checksum = p.m('checksumming %s' %(model), cmdd=dict(cmd='%s %s' %(path.abspath(checksum), path.join(im, iname)))).get('out')
 
                 info[model] = info.get(model, dict())
                 info[model][sp] = dict(image=iname, checksum=checksum)
@@ -34,4 +34,4 @@ def gen_info(images, sign):
 if __name__ == '__main__':
     a = args()
 
-    gen_info(a.images, a.sign)
+    gen_info(a.images, a.checksum)

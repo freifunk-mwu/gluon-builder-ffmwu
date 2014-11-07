@@ -5,11 +5,12 @@ DEFAULTS = path.join(path.dirname(__file__), 'builder_defaults.yaml')
 def pinit(mname, clean=False, verbose=True):
 
     from photon import Photon
-    from photon.util.locations import search_location
+    from photon.util.locations import change_location, search_location
 
     p = Photon(DEFAULTS, config=None, meta='builder_%s_meta.json' %(mname), verbose=verbose)
     s = p.settings.get
 
+    if clean: change_location(s['prepare']['stage_dir'], False, move=True)
     p.meta.stage(search_location('builder_meta.json', create_in=s['prepare']['stage_dir']), clean=clean)
     return p, s
 
