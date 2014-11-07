@@ -13,24 +13,26 @@ def gen_bconf(branch):
 
         priority, version = s['siteconf']['site']['gluon_priority'], s['siteconf']['site']['gluon_release_num']
         gluon, site = ginit(p)
-
-        release = '%s-%s-g_%s-s_%s' %(version, get_timestamp(), gluon.short_commit, site.short_commit)
+        desc = '%s-g_%s-s_%s' %(get_timestamp(), gluon.short_commit, site.short_commit)
+        release = '%s-%s' %(version, desc)
+        archive_dir = path.join(s['publish']['archive_dir'], '%s-%s-%s' %(version, branch, desc))
         shuffle(s['common']['communities'])
 
         fields=dict(
-            archive_dir=s['publish']['archive_dir'],
+            archive_dir=archive_dir,
             autosign_key=s['publish']['autosign_key'],
             build_branch=s['common']['branches']['build'],
             build_dir=s['gluon']['local']['dir'],
             call_branch=branch,
             communities=' '.join(s['common']['communities']),
+            info_file=s['prepare']['info'],
             mkcmd=s['common']['mkcmd'],
             priority=priority,
             pycmd=s['common']['pycmd'],
             release=release,
             stage_dir=s['prepare']['stage_dir']
         )
-        write_json(s['prepare']['r_inf'], dict(info=fields))
+        write_json(path.join(s['prepare']['stage_dir'], s['prepare']['info']), dict(_info=fields))
 
         bconf = p.template_handler(s['prepare']['bconf']['tpl'], fields=fields)
         bconf.write(s['prepare']['bconf']['out'], append=False)

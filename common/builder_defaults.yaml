@@ -32,8 +32,8 @@ prepare:
     bconf:
         out: !loc_join ['call_dir', 'bconf']
         tpl: !loc_join ['call_dir', 'common', 'bconf.tpl']
+    info: 'info.json'
     stage_dir: &S_DIR !loc_join [*H_DIR, '_stage']
-    r_inf: !loc_join [*S_DIR, 'info.json']
     image_dirs:
         mz: !loc_join [*S_DIR, 'images', 'mz']
         wi: !loc_join [*S_DIR, 'images', 'wi']

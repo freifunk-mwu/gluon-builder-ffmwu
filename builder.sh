@@ -12,7 +12,6 @@ if [ ! -f "bconf" ]; then echo -e "~ error: no bconf found"; exit 42; fi
 . $CDIR/bconf
 rm $CDIR/bconf
 
-ODIR="$ARCHIVEDIR/$RELEASE"
 LOGP="$PYCMD $CDIR/_build_logger.py"
 
 for C in $COMMUNITIES; do
@@ -38,21 +37,17 @@ for C in $COMMUNITIES; do
     $LOGP "~ ${C}_$RELEASE ~ sign ($AUTOSIGNKEY images/sysupgrade/$CALLBRANCH.manifest)" 2>&1 | $LOG
     "$WDIR/contrib/sign.sh" $AUTOSIGNKEY "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
 
-    $LOGP "~ ${C}_$RELEASE ~ appendix" 2>&1 | $LOG
-
     $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -s "$WDIR/contrib/sign.sh"
-    for g in "$WDIR/images/*/*"; do echo "$(scripts/sha512sum.sh $g) $g" >> $SUMS; done
-    "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
 
-    mkdir -p "$ODIR/${C}" 2>&1 | $LOG
-    cp -rv images "$ODIR/${C}/" 2>&1 | $LOG
+    $LOGP "~ ${C}_$RELEASE ~ appendix" 2>&1 | $LOG
+    mkdir -p "$ARCHIVEDIR/${C}" 2>&1 | $LOG
+    cp -rv images "$ARCHIVEDIR/${C}/" 2>&1 | $LOG
     gzip $LOGF
-
-    cp -rv "$STAGEDIR/." $ODIR
+    cp -rv "$STAGEDIR/." $ARCHIVEDIR
 
 done
 
-rm -rf $BUILDDIR $STAGEDIR
+rm -rf "$ARCHIVEDIR/$INFOFILE" $BUILDDIR $STAGEDIR
 
 echo "~ finished"
 exit 0
