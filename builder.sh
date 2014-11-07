@@ -43,14 +43,14 @@ for C in $COMMUNITIES; do
     for g in "$WDIR/images/*/*"; do echo "$(scripts/sha512sum.sh $g) $g" >> $SUMS; done
     "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
 
-    mkdir -p "$ARCHIVEDIR/${C}" 2>&1 | $LOG
-    cp -rv images "$ARCHIVEDIR/${C}/" 2>&1 | $LOG
+    mkdir -p "$LIBRARYDIR/${C}" 2>&1 | $LOG
+    cp -rv "$WDIR/images/." "$LIBRARYDIR/${C}/" 2>&1 | $LOG
     gzip $LOGF
-    cp -rv "$STAGEDIR/." $ARCHIVEDIR
+    cp -rv "$STAGEDIR/." $LIBRARYDIR
 
 done
 
-rm -rf "$ARCHIVEDIR/$INFOFILE" $BUILDDIR $STAGEDIR
+rm -rf "$LIBRARYDIR/$INFOFILE" $BUILDDIR $STAGEDIR
 
 echo "~ finished"
 exit 0
