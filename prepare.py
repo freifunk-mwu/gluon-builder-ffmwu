@@ -3,7 +3,7 @@
 def prepare(branch):
     from common import pinit, ginit
     from photon.util.locations import change_location
-    from gen_bconf import gen_bconf
+    from _gen_bconf import gen_bconf
 
     p, s = pinit('prepare', clean=True)
 

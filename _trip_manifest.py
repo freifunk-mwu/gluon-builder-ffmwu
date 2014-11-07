@@ -5,8 +5,8 @@ def args():
 
     s = sinit()
     a = ArgumentParser(prog='gluon_builder_trip_manifest', description='do not launch manually', epilog='builder.sh needs this while building', add_help=True)
-    a.add_argument('--branch', '-b', action='store', choices=s['common']['branches']['avail'].keys(), help='the build branch')
-    a.add_argument('--manifest', '-m', action='store', help='the manifest file')
+    a.add_argument('--branch', '-b', action='store', required=True, choices=s['common']['branches']['avail'].keys(), help='The build branch')
+    a.add_argument('--manifest', '-m', action='store', required=True, help='The manifest file')
     return a.parse_args()
 
 def trip_manifest(branch, manifest):
@@ -22,13 +22,9 @@ def trip_manifest(branch, manifest):
     if mf and mf.count('BRANCH=') == 1:
 
         trip_branch = '\n'.join('BRANCH=%s' %(branch) for branch in sorted(s['common']['branches']['avail'].keys()))
-        info_branch = '\n# '.join(i for i in ['sources: %s' %(branch), 'build: %s' %(s['common']['branches']['build'])])
         m = p.template_handler(
-            mf.replace('BRANCH=%s' %(branch), '${trip_branch}\n# ${info_branch}'),
-            fields=dict(
-                trip_branch=trip_branch,
-                info_branch=info_branch,
-            )
+            mf.replace('BRANCH=%s' %(branch), '${trip_branch}'),
+            fields=dict(trip_branch=trip_branch)
         )
         change_location(manifest, False, move=True)
         m.write(manifest.replace('%s.manifest' %(branch), 'manifest'), append=False)
