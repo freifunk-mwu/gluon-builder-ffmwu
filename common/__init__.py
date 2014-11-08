@@ -35,5 +35,7 @@ def branch_args():
     s = sinit()
 
     a = ArgumentParser(prog='gluon_builder', description='you must specify a branch', epilog='-.-', add_help=True)
-    a.add_argument('--branch', '-b', action='store', choices=s['common']['branches']['avail'].keys(), default=s['common']['branches']['noarg'])
+    a.add_argument('--branch', '-b', action='store', choices=s['common']['branches']['avail'].keys(), default=s['common']['branches']['noarg'], help='The branch to build')
+    a.add_argument('--gt', '-g', action='store', help='A git commit-id or tag for gluon')
+    a.add_argument('--st', '-s', action='store', help='A git commit-id or tag for site')
     return a.parse_args()

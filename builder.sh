@@ -40,7 +40,7 @@ for C in $COMMUNITIES; do
     $LOGP "~ ${C}_$RELEASE ~ appendix" 2>&1 | $LOG
     $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -c "$WDIR/scripts/sha512sum.sh"
 
-    for g in "$WDIR/images/*/*"; do echo "$(scripts/sha512sum.sh $g) $g" >> $SUMS; done
+    for g in images/*/*; do echo "$($WDIR/scripts/sha512sum.sh $g) $g" >> $SUMS; done
     "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
 
     mkdir -p "$LIBRARYDIR/${C}" 2>&1 | $LOG

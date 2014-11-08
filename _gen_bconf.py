@@ -1,5 +1,5 @@
 
-def gen_bconf(branch):
+def gen_bconf(branch, gt=None, st=None):
     from os import path
     from random import shuffle
     from photon.util.system import get_timestamp
@@ -13,24 +13,29 @@ def gen_bconf(branch):
 
         priority, version = s['siteconf']['site']['gluon_priority'], s['siteconf']['site']['gluon_release_num']
         gluon, site = ginit(p)
-        desc = '%s-g_%s-s_%s' %(get_timestamp(), gluon.short_commit, site.short_commit)
+        gt = gt if gt else gluon.short_commit[0]
+        st = st if st else site.short_commit[0]
+
+        desc = '%s-g_%s-s_%s' %(get_timestamp(), gt, st)
         shuffle(s['common']['communities'])
 
         fields=dict(
-            autosign_key=s['publish']['autosign_key'],
             build_branch=s['common']['branches']['build'],
-            build_dir=s['gluon']['local']['dir'],
             call_branch=branch,
             communities=' '.join(s['common']['communities']),
+            priority=priority,
+            release='%s-%s' %(version, desc)
+        )
+        write_json(path.join(s['prepare']['stage_dir'], s['prepare']['info']), dict(_info=fields))
+        fields.update(dict(
+            autosign_key=s['publish']['autosign_key'],
+            build_dir=s['gluon']['local']['dir'],
             info_file=s['prepare']['info'],
             library_dir=path.join(s['publish']['library_dir'], '%s-%s-%s' %(version, branch, desc)),
             mkcmd=s['common']['mkcmd'],
-            priority=priority,
             pycmd=s['common']['pycmd'],
-            release='%s-%s' %(version, desc),
             stage_dir=s['prepare']['stage_dir']
-        )
-        write_json(path.join(s['prepare']['stage_dir'], s['prepare']['info']), dict(_info=fields))
+        ))
 
         bconf = p.template_handler(s['prepare']['bconf']['tpl'], fields=fields)
         bconf.write(s['prepare']['bconf']['out'], append=False)
@@ -39,4 +44,4 @@ if __name__ == '__main__':
     from common import branch_args
     a = branch_args()
 
-    gen_bconf(a.branch)
+    gen_bconf(a.branch, a.gt, a.st)
