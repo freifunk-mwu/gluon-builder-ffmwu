@@ -1,6 +1,7 @@
 
 from os import path
 DEFAULTS = path.join(path.dirname(__file__), 'builder_defaults.yaml')
+from argparse import ArgumentParser
 
 def pinit(mname, clean=False, verbose=True):
 
@@ -29,13 +30,35 @@ def ginit(p, c='wi'):
 
     return gluon, site
 
-def branch_args():
-    from argparse import ArgumentParser
-
+def prepare_args():
     s = sinit()
-
-    a = ArgumentParser(prog='gluon_builder', description='you must specify a branch', epilog='-.-', add_help=True)
+    a = ArgumentParser(prog='gluon_builder_prepare', description='Prepare gluon builds', epilog='-.-')
     a.add_argument('--branch', '-b', action='store', choices=s['common']['branches']['avail'].keys(), default=s['common']['branches']['noarg'], help='The branch to build')
     a.add_argument('--gt', '-g', action='store', help='A git commit-id or tag for gluon')
     a.add_argument('--st', '-s', action='store', help='A git commit-id or tag for site')
+    return a.parse_args()
+
+def log_args():
+    a = ArgumentParser(prog='gluon_builder_build_logger', description='do not launch manually', epilog='builder.sh needs this while building')
+    a.add_argument('msg', action='store', help='The log message')
+    return a.parse_args()
+
+def uni_args():
+    s = sinit()
+    a = ArgumentParser(prog='gluon_builder_uni_manifest', description='Do not launch manually', epilog='builder.sh needs this while building')
+    a.add_argument('--branch', '-b', action='store', required=True, choices=s['common']['branches']['avail'].keys(), help='The build branch')
+    a.add_argument('--manifest', '-m', action='store', required=True, help='The manifest file')
+    return a.parse_args()
+
+def info_args():
+    a = ArgumentParser(prog='gluon_builder_gen_info', description='Do not launch manually', epilog='builder.sh needs this while building')
+    a.add_argument('--images', '-i', action='store', required=True, help='The images folder')
+    a.add_argument('--ccmd', '-c', action='store', help='The checksum executable')
+    return a.parse_args()
+
+def publish_args():
+    s = sinit()
+    a = ArgumentParser(prog='gluon_builder_release', description='Release gluon builds', epilog='-.-')
+    a.add_argument('folder', action='store', help='The folder from the library containing the builds')
+    a.add_argument('--branch', '-b', action='store', required=True, choices=s['common']['branches']['avail'].keys(), help='The release branch')
     return a.parse_args()

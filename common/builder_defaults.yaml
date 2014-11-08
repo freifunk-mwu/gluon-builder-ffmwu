@@ -8,8 +8,8 @@ common:
         build: stable
         noarg: experimental
     communities:
-    - mz
-    - wi
+        mz: 'mainz'
+        wi: 'wiesbaden'
     pycmd: 'python3'
     mkcmd: 'make -j7 V=sss'
 gluon:

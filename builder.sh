@@ -32,7 +32,7 @@ for C in $COMMUNITIES; do
     $LOGP "~ ${C}_$RELEASE ~ manifest (GLUON_BRANCH=$CALLBRANCH GLUON_PRIORITY=$PRIORITY)" 2>&1 | $LOG
     $MKCMD manifest GLUON_BRANCH=$CALLBRANCH GLUON_PRIORITY=$PRIORITY 2>&1 | $LOG
 
-    $PYCMD $CDIR/_trip_manifest.py -b $CALLBRANCH -m "$WDIR/images/sysupgrade/$CALLBRANCH.manifest"
+    $PYCMD $CDIR/_uni_manifest.py -b $CALLBRANCH -m "$WDIR/images/sysupgrade/$CALLBRANCH.manifest"
 
     $LOGP "~ ${C}_$RELEASE ~ sign ($AUTOSIGNKEY images/sysupgrade/$CALLBRANCH.manifest)" 2>&1 | $LOG
     "$WDIR/contrib/sign.sh" $AUTOSIGNKEY "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG

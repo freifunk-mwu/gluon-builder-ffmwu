@@ -1,7 +1,6 @@
 
 def gen_bconf(branch, gt=None, st=None):
     from os import path
-    from random import shuffle
     from photon.util.system import get_timestamp
     from photon.util.files import write_json
     from common import pinit, ginit
@@ -17,12 +16,11 @@ def gen_bconf(branch, gt=None, st=None):
         st = st if st else site.short_commit[0]
 
         desc = '%s-g_%s-s_%s' %(get_timestamp(), gt, st)
-        shuffle(s['common']['communities'])
 
         fields=dict(
             build_branch=s['common']['branches']['build'],
             call_branch=branch,
-            communities=' '.join(s['common']['communities']),
+            communities=' '.join(s['common']['communities'].keys()),
             priority=priority,
             release='%s-%s' %(version, desc)
         )
@@ -41,7 +39,7 @@ def gen_bconf(branch, gt=None, st=None):
         bconf.write(s['prepare']['bconf']['out'], append=False)
 
 if __name__ == '__main__':
-    from common import branch_args
-    a = branch_args()
+    from common import prepare_args
 
+    a = prepare_args()
     gen_bconf(a.branch, a.gt, a.st)

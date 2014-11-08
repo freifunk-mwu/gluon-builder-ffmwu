@@ -1,12 +1,4 @@
 
-def args():
-    from argparse import ArgumentParser
-
-    a = ArgumentParser(prog='gluon_builder_gen_info', description='do not launch manually', epilog='builder.sh needs this while building', add_help=True)
-    a.add_argument('--images', '-i', action='store', required=True, help='The images folder')
-    a.add_argument('--ccmd', '-c', action='store', help='The checksum executable')
-    return a.parse_args()
-
 def gen_info(images, ccmd):
     from os import path, listdir
     from photon.util.files import read_json, write_json
@@ -32,6 +24,7 @@ def gen_info(images, ccmd):
     p.m('info generated', more=dict(images=images, info=info))
 
 if __name__ == '__main__':
-    a = args()
+    from common import info_args
 
+    a = info_args()
     gen_info(a.images, a.ccmd)

@@ -7,22 +7,22 @@ def prepare(branch, gt=None, st=None):
 
     p, s = pinit('prepare', clean=True)
 
-    for community in s['common']['communities']:
+    for community in s['common']['communities'].keys():
         change_location(s['gluon']['local'][community], False, move=True)
         tags = s['common']['branches']['avail'][branch]
         gluon, site = ginit(p, community)
 
         if gt:
-            if gt in gluon.tag: gluon.tag = gt
-            elif gt in gluon.commit: gluon.commit = gt
+            if gluon.tag and gt in gluon.tag: gluon.tag = gt
+            elif gluon.commit and gt in gluon.commit or gt in gluon.short_commit: gluon.commit = gt
             else: p.m('Invalid git commit-id or tag specified for gluon', state=True)
         else:
             if tags[0]: gluon.tag = None
             else: gluon.branch = None
 
         if st:
-            if st in site.tag: site.tag = st
-            elif st in site.commit: site.commit = st
+            if site.tag and st in site.tag: site.tag = st
+            elif site.commit and st in site.commit or st in site.short_commit: site.commit = st
             else: p.m('Invalid git commit-id or tag specified for site', state=True)
         else:
             if tags[1]: site.tag = None
@@ -33,7 +33,7 @@ def prepare(branch, gt=None, st=None):
     gen_bconf(branch, gt, st)
 
 if __name__ == '__main__':
-    from common import branch_args
-    a = branch_args()
+    from common import prepare_args
 
+    a = prepare_args()
     prepare(a.branch, a.gt, a.st)
