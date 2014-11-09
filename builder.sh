@@ -38,8 +38,11 @@ for C in $COMMUNITIES; do
     "$WDIR/contrib/sign.sh" $AUTOSIGNKEY "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
 
     $LOGP "~ ${C}_$RELEASE ~ appendix" 2>&1 | $LOG
-    $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -c "$WDIR/scripts/sha512sum.sh"
+    for c in "$WDIR/site/site.conf" "$WDIR/site/site.mk" "$WDIR/site/modules"; do
+        if [ -f "$c" ]; then cp "$c" "$WDIR/images/.$(basename $c)"; fi
+    done
 
+    $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -c "$WDIR/scripts/sha512sum.sh"
     for g in images/*/*; do echo "$($WDIR/scripts/sha512sum.sh $g) $g" >> $SUMS; done
     "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
 
@@ -51,6 +54,8 @@ for C in $COMMUNITIES; do
 done
 
 rm -rf "$LIBRARYDIR/$INFOFILE" $BUILDDIR $STAGEDIR
+
+$PYCMD $CDIR/release.py $LIBRARYDIR -b $CALLBRANCH
 
 echo "~ finished"
 exit 0
