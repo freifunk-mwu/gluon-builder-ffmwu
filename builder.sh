@@ -55,7 +55,7 @@ done
 
 rm -rf "$LIBRARYDIR/$INFOFILE" $BUILDDIR $STAGEDIR
 
-$PYCMD $CDIR/release.py $LIBRARYDIR -b $CALLBRANCH
+$PYCMD $CDIR/publish.py $LIBRARYDIR -b $CALLBRANCH
 
 echo "~ finished"
 exit 0
