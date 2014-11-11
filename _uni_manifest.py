@@ -29,6 +29,7 @@ def uni_manifest(branch, manifest):
             )
 
         p.m('uni_manifest written', more=dict(branch=branch), verbose=True)
+    else: p.m('Refusing to write uni_manifest', more=dict(branch=branch, manifest=manifest), state=False)
 
 if __name__ == '__main__':
     from common import uni_args

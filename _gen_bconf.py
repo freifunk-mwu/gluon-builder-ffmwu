@@ -7,7 +7,7 @@ def gen_bconf(branch, gt=None, st=None):
 
     p, s = pinit('gen_bconf')
 
-    if p.settings.load('siteconf', path.join(s['site']['local']['wi'], 'meta.yaml')):
+    if p.settings.load('siteconf', path.join(s['site']['local']['wi'], s['site']['generator_settings'])):
         p.s2m
 
         priority, version = s['siteconf']['site']['gluon_priority'], s['siteconf']['site']['gluon_release_num']

@@ -23,6 +23,7 @@ site:
     local:
         mz: !loc_join [*B_MZ, 'site']
         wi: !loc_join [*B_WI, 'site']
+    generator_settings: 'settings.yaml'
 publish:
     autosign_key: !loc_join ['home_dir', '.ecdsa', !str_join ['hostname', '.prv']]
     http_root_dir: &H_DIR !loc_join ['/var/www/html']
@@ -34,7 +35,5 @@ prepare:
         out: !loc_join ['call_dir', 'bconf']
         tpl: !loc_join ['call_dir', 'common', 'bconf.tpl']
     info: 'info.json'
-    stage_dir: &S_DIR !loc_join [*H_DIR, '_stage']
-    image_dirs:
-        mz: !loc_join [*S_DIR, 'images', 'mz']
-        wi: !loc_join [*S_DIR, 'images', 'wi']
+    stage_dir: !loc_join [*H_DIR, '_stage']
+
