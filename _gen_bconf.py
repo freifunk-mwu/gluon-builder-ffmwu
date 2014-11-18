@@ -21,8 +21,11 @@ def gen_bconf(branch, gt=None, st=None):
             build_branch=s['common']['branches']['build'],
             call_branch=branch,
             communities=' '.join(s['common']['communities'].keys()),
+            gluon_t=gt,
+            site_t=st,
             priority=priority,
-            release='%s-%s' %(version, desc)
+            release='%s-%s' %(version, desc),
+            version=version
         )
         write_json(path.join(s['prepare']['stage_dir'], s['prepare']['info']), dict(_info=fields))
         fields.update(dict(
