@@ -2,17 +2,18 @@
 
 def publish(folder, branch):
     from os import path
-    from photon.util.locations import search_location, change_location
-    from common import pinit
+    from photon.util.locations import change_location
+    from common import _pinit
 
-    p, s = pinit('publish')
+    p = _pinit('publish')
+    s = p.settings.get
 
-    folder = path.abspath(folder)
+    folder = path.realpath(folder)
     if not s['publish']['library_dir'] == path.dirname(folder):
         p.m('wrong folder selected!', more=dict(folder=folder, should_be_subfolder_of=s['publish']['library_dir']), state=True)
 
     for community_s, community_l in s['common']['communities'].items():
-        fulltgt = search_location(branch, create_in=path.join(s['publish']['http_fw_dir'], community_l))
+        fulltgt = path.join(s['publish']['http_fw_dir'], community_l, branch)
         change_location(fulltgt, False, move=True)
         tgt = path.dirname(fulltgt)
         lnk = path.relpath(path.join(folder, community_s), tgt)

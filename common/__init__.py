@@ -3,12 +3,16 @@ from os import path
 DEFAULTS = path.join(path.dirname(__file__), 'builder_defaults.yaml')
 from argparse import ArgumentParser
 
-def pinit(mname, clean=False, verbose=True):
+def _pinit(mname, verbose=True):
 
     from photon import Photon
+    return Photon(DEFAULTS, config=None, meta='builder_%s_meta.json' %(mname), verbose=verbose)
+
+def pinit(mname, clean=False, verbose=True):
+
     from photon.util.locations import change_location, search_location
 
-    p = Photon(DEFAULTS, config=None, meta='builder_%s_meta.json' %(mname), verbose=verbose)
+    p = _pinit(mname, verbose)
     s = p.settings.get
 
     if clean: change_location(s['prepare']['stage_dir'], False, move=True)
