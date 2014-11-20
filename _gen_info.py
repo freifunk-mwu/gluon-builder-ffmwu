@@ -13,7 +13,7 @@ def gen_info(images, ccmd):
         im = path.join(images, sp)
         if info and path.exists(im):
             for iname in listdir(im):
-                model = iname.split('%s-' %(info['_info']['release']))[-1].split('-%s.bin' %(sp))[0]
+                model = iname.split('%s-' %(info['_info']['release']))[-1].split('-%s.bin' %(sp))[0].split('.bin')[0]
                 checksum = p.m('checksumming %s' %(model), cmdd=dict(cmd='%s %s' %(path.abspath(ccmd), path.join(im, iname)))).get('out')
 
                 info[model] = info.get(model, dict())
