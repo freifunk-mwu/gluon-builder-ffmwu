@@ -25,6 +25,12 @@ builder_defaults.yaml
     :language: yaml
     :linenos:
 
+.. note::
+    The builder heavily integrates with this config file!
+
+    If you are not building firmware for freifunk-mwu, it is best to fork this repository and create a branch for local changes. This way, you can keep track of updates here, or have the possibility merge code back. Thanks
+
+
 .. _logger:
 
 _build_logger.py
