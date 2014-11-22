@@ -1,5 +1,32 @@
 
 def uni_manifest(branch, manifest):
+    '''
+    After building the images, a manifest file gets created.
+
+    :param branch: The branch currently building
+    :param manifest: The path to the manifest file
+
+    .. seealso:: :func:`common.uni_args`
+
+    Before it gets signed, this function is called to enable cross releasing of branches by clever symlinking.
+
+    It opens specified `manifest`-file and replaces::
+
+        BRANCH=$branch
+
+    by::
+
+        BRANCH=experimental
+        BRANCH=beta
+        BRANCH=stable
+
+    then it saves it as `manifest` and symlinks `experimental.manifest`, `beta.manifest` and `stable.manifest` to it.
+
+    (This example assumes the branch names are left to the default values in :ref:`defaults`)
+
+    .. seealso:: :func:`common.uni_args`
+    '''
+
     from os import path
     from photon.util.files import read_file
     from photon.util.locations import change_location
