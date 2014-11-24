@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 
 def prepare(branch, gt=None, st=None):
+    '''
+    Checks out Gluon sources and site-conf repositories at proper commit-ids or tags according to the branch to build.
+    Generates a site-conf afterwards and calls :func:`_gen_bconf` then
+
+    .. seealso:: :func:`common.prepare_args` for command line syntax
+    '''
+
     from common import pinit, ginit
     from photon.util.locations import change_location
     from _gen_bconf import gen_bconf

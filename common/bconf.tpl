@@ -1,4 +1,4 @@
-# bobby the gluon builder
+# no comment
 
 export AUTOSIGNKEY="${autosign_key}"
 export BUILDBRANCH="${build_branch}"

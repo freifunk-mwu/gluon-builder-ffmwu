@@ -1,7 +1,7 @@
 '''
 .. |mname| replace:: Name your initial meta file
 .. |verbose| replace:: Set verbose flag of Photon instance
-.. |argparse| replace:: :py:class:`argparse.ArgumentParser`  command line
+.. |argparse| replace:: :py:class:`argparse.ArgumentParser` command line
 '''
 
 from os import path

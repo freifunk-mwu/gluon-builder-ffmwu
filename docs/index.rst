@@ -1,11 +1,24 @@
-.. include:: shared.rst
 
 Gluon Builder Documentation
 ===========================
 
+.. image:: _static/photon_builder.png
+    :scale: 15%
+    :align: right
+    :alt: gluon builder logo, not a brick trowel with a moustache
+
+
 Welcome to the Gluon Builder Documentation!
 
+|
+|
+
 .. include:: ../README.rst
+
+Currently required:
+
+.. literalinclude:: ../requirements.txt
+    :linenos:
 
 Contents
 --------
@@ -15,40 +28,10 @@ In the following the builder is documented in order how a normal compiling proce
 .. toctree::
    :maxdepth: 2
 
-   preparation
-
-|prepare_e|
-
-|prepare_site_e|
-
-|bconf_e|
-
-.. toctree::
-   :maxdepth: 2
-
    builder
-
-|builder_e|
-
-.. toctree::
-   :maxdepth: 2
-
+   preparation
    tools
-
-|common_e|
-
-|logger_e|
-
-|manifest_e|
-
-.. toctree::
-   :maxdepth: 2
-
    finishing
-
-|info_e|
-
-|publish_e|
 
 .. rubric:: Further stuff:
 

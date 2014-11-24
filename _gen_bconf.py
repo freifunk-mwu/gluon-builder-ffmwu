@@ -1,5 +1,14 @@
 
 def gen_bconf(branch, gt=None, st=None):
+    '''
+    Provides all information needed by the builder in placing a ``bconf``-file.
+
+    Since we are already collecting information here, the ``info.json`` is created as well.
+
+    The same arguments as in :func:`prepare` are used here.
+
+    .. seealso:: :func:`common.prepare_args` for command line syntax
+    '''
     from os import path
     from photon.util.system import get_timestamp
     from photon.util.files import write_json

@@ -16,6 +16,6 @@ Structure
 
 The core is implemented as a shell script (``builder.sh``) - it depends heavily on it's helper scripts - written in Python 3. The helper scripts all are using `photon <http://github/spookey/photon>`_ as a backend for easy and quick programming.
 
-You can install all dependencies automatically using pip and the ``requirements.txt``::
+Install all dependencies at once using pip and the ``requirements.txt``::
 
     $ pip3 -r requirements.txt
