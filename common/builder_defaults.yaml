@@ -4,7 +4,7 @@ common:
             # branch-name: [gluon-tag, site-tag]
             experimental:   [false, false]
             beta:           [true, false]
-            stable:         [true,  true]
+            stable:         [true, true]
         build: stable
         noarg: experimental
     communities:

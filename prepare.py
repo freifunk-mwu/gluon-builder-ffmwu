@@ -3,7 +3,8 @@
 def prepare(branch, gt=None, st=None):
     '''
     Checks out Gluon sources and site-conf repositories at proper commit-ids or tags according to the branch to build.
-    Generates a site-conf afterwards and calls :func:`_gen_bconf` then
+    Generates a site-conf afterwards.
+    Automatically invokes :func:`_gen_bconf` afterwards
 
     .. seealso:: :func:`common.prepare_args` for command line syntax
     '''
