@@ -46,7 +46,7 @@ _gen_bconf.py
     :undoc-members:
     :private-members:
 
-The purpose is to pass information needed for building. This is done by placing a ``bconf`` (see :ref:`bconf_tpl` for contents).
+The purpose of this helper is to pass information to the :ref:`builder`. This is done by placing a ``bconf`` (see :ref:`bconf_tpl` for contents).
 After this is done, you should have two new files::
 
     ~/clones/gluon-builder-ffmwu/bconf

@@ -7,7 +7,7 @@ set -o pipefail
 # Do not build as root!
 if [ "$EUID" -eq 0 ]; then echo -e "~ error: you are root."; exit 23; fi
 
-# Locates the own directory
+# Locates own directory
 # CDIR is used later on for calling helper scripts with their correct path
 CDIR=$(cd "$(dirname "$0")"; pwd)
 
@@ -30,7 +30,7 @@ for C in $COMMUNITIES; do
     SUMS="$STAGEDIR/${C}_$RELEASE.sha512"
     LOGF="$STAGEDIR/${C}_$RELEASE.log"
     $LOGP "~ ${C}_$RELEASE" > $LOGF
-    # Another logger-shortcut, this time stdout to file
+    # Another logger-shortcut, this time: stdout to file
     # (one per community)
     LOG="tee -a $LOGF"
 

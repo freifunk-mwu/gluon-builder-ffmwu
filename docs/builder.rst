@@ -2,7 +2,7 @@
 The builder
 ===========
 
-Below is the full source of the (soon to be) commented build script.
+Below is the full source of the build script with comments in it.
 
 .. _builder:
 
