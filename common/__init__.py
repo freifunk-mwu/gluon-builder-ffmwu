@@ -76,6 +76,7 @@ def prepare_args():
     a.add_argument('--branch', '-b', action='store', choices=s['common']['branches']['avail'].keys(), default=s['common']['branches']['noarg'], help='The branch to build')
     a.add_argument('--gt', '-g', action='store', help='A git commit-id or tag for gluon')
     a.add_argument('--st', '-s', action='store', help='A git commit-id or tag for site')
+    a.add_argument('--modules', action='store_true', help='Prepare modules in siteconf generator')
     return a.parse_args()
 
 def log_args():

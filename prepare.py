@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def prepare(branch, gt=None, st=None):
+def prepare(branch, gt=None, st=None, modules=False):
     '''
     Checks out Gluon sources and site-conf repositories at proper commit-ids or tags according to the branch to build.
     Generates a site-conf afterwards.
@@ -36,7 +36,7 @@ def prepare(branch, gt=None, st=None):
             if tags[1]: site.tag = None
             else: site.branch = None
 
-        p.m('generating site for %s' %(community), cmdd=dict(cmd='%s generate.py %s --nomodules' %(s['common']['pycmd'], community), cwd=s['site']['local'][community]), verbose=True)
+        p.m('generating site for %s' %(community), cmdd=dict(cmd='%s generate.py %s %s' %(s['common']['pycmd'], community, '--nomodules' if not modules else ''), cwd=s['site']['local'][community]), verbose=True)
 
     gen_bconf(branch, gt, st)
 
@@ -44,4 +44,4 @@ if __name__ == '__main__':
     from common import prepare_args
 
     a = prepare_args()
-    prepare(a.branch, a.gt, a.st)
+    prepare(a.branch, gt=a.gt, st=a.st, modules=a.modules)

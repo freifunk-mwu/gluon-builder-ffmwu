@@ -54,4 +54,4 @@ if __name__ == '__main__':
     from common import prepare_args
 
     a = prepare_args()
-    gen_bconf(a.branch, a.gt, a.st)
+    gen_bconf(a.branch, gt=a.gt, st=a.st)
