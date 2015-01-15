@@ -18,4 +18,4 @@ The core is implemented as a shell script (``builder.sh``) - it depends heavily 
 
 Install all dependencies at once using pip and the ``requirements.txt``::
 
-    $ pip3 -r requirements.txt
+    $ pip3 install -r requirements.txt
