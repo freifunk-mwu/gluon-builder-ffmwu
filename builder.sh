@@ -67,7 +67,7 @@ for C in $COMMUNITIES; do
     # For us, it is machine created now, so store the results
     $LOGP "~ ${C}_$RELEASE ~ appendix" 2>&1 | $LOG
     for c in "$WDIR/site/site.conf" "$WDIR/site/site.mk" "$WDIR/site/modules"; do
-        if [ -f "$c" ]; then cp "$c" "$WDIR/images/.$(basename $c)"; fi
+        if [ -f "$c" ]; then cp "$c" "$WDIR/images/"; fi
     done
 
     # The info file is a json containing a mapping of router models matching image-file names.
