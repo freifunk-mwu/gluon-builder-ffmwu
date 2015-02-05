@@ -24,7 +24,7 @@ def gen_bconf(branch, gt=None, st=None):
         gt = gt if gt else gluon.short_commit[0]
         st = st if st else site.short_commit[0]
 
-        desc = '-%s' %(get_timestamp(time=False)) if not all(s['common']['branches']['avail'][branch]) else ''
+        desc = '-exp-%s' %(get_timestamp(time=False)) if not all(s['common']['branches']['avail'][branch]) else ''
 
         fields=dict(
             call_branch=branch,
