@@ -16,7 +16,12 @@ def _pinit(mname, verbose=True):
     :param verbose: |verbose|
     '''
     from photon import Photon
-    return Photon(DEFAULTS, config=None, meta='builder_%s_meta.json' %(mname), verbose=verbose)
+    return Photon(
+        DEFAULTS,
+        config=None,
+        meta='builder_%s_meta.json' %(mname),
+        verbose=verbose
+    )
 
 def pinit(mname, clean=False, verbose=True):
     '''
@@ -33,8 +38,13 @@ def pinit(mname, clean=False, verbose=True):
     p = _pinit(mname, verbose)
     s = p.settings.get
 
-    if clean: change_location(s['prepare']['stage_dir'], False, move=True)
-    p.meta.stage(search_location('builder_meta.json', create_in=s['prepare']['stage_dir']), clean=clean)
+    if clean:
+        change_location(s['prepare']['stage_dir'], False, move=True)
+
+    p.meta.stage(
+        search_location('builder_meta.json', create_in=s['prepare']['stage_dir']),
+        clean=clean
+    )
     return p, s
 
 def sinit(verbose=False):
@@ -46,7 +56,11 @@ def sinit(verbose=False):
     '''
     from photon import Settings
 
-    return Settings(DEFAULTS, config=None, verbose=verbose).get
+    return Settings(
+        DEFAULTS,
+        config=None,
+        verbose=verbose
+    ).get
 
 def ginit(p, c='wi'):
     '''
@@ -72,11 +86,33 @@ def prepare_args():
     :param --st -s: A git commit-id or tag for site
     '''
     s = sinit()
-    a = ArgumentParser(prog='gluon_builder_prepare', description='Prepare gluon builds', epilog='-.-')
-    a.add_argument('--branch', '-b', action='store', choices=s['common']['branches']['avail'].keys(), default=s['common']['branches']['noarg'], help='The branch to build')
-    a.add_argument('--gt', '-g', action='store', help='A git commit-id or tag for gluon')
-    a.add_argument('--st', '-s', action='store', help='A git commit-id or tag for site')
-    a.add_argument('--modules', action='store_true', help='Prepare modules in siteconf generator')
+    a = ArgumentParser(
+        prog='gluon_builder_prepare',
+        description='Prepare gluon builds',
+        epilog='-.-'
+    )
+    a.add_argument(
+        '--branch', '-b',
+        action='store',
+        choices=s['common']['branches']['avail'].keys(),
+        default=s['common']['branches']['noarg'],
+        help='The branch to build'
+    )
+    a.add_argument(
+        '--gt', '-g',
+        action='store',
+        help='A git commit-id or tag for gluon'
+    )
+    a.add_argument(
+        '--st', '-s',
+        action='store',
+        help='A git commit-id or tag for site'
+    )
+    a.add_argument(
+        '--modules',
+        action='store_true',
+        help='Prepare modules in siteconf generator'
+    )
     return a.parse_args()
 
 def log_args():
@@ -85,8 +121,16 @@ def log_args():
 
     :param msg: The log message
     '''
-    a = ArgumentParser(prog='gluon_builder_build_logger', description='do not launch manually', epilog='builder.sh needs this while building')
-    a.add_argument('msg', action='store', help='The log message')
+    a = ArgumentParser(
+        prog='gluon_builder_build_logger',
+        description='do not launch manually',
+        epilog='builder.sh needs this while building'
+    )
+    a.add_argument(
+        'msg',
+        action='store',
+        help='The log message'
+    )
     return a.parse_args()
 
 def uni_args():
@@ -97,9 +141,24 @@ def uni_args():
     :param --manifest -m: Path to the manifest file
     '''
     s = sinit()
-    a = ArgumentParser(prog='gluon_builder_uni_manifest', description='Do not launch manually', epilog='builder.sh needs this while building')
-    a.add_argument('--branch', '-b', action='store', required=True, choices=s['common']['branches']['avail'].keys(), help='The build branch')
-    a.add_argument('--manifest', '-m', action='store', required=True, help='The manifest file')
+    a = ArgumentParser(
+        prog='gluon_builder_uni_manifest',
+        description='Do not launch manually',
+        epilog='builder.sh needs this while building'
+    )
+    a.add_argument(
+        '--branch', '-b',
+        action='store',
+        required=True,
+        choices=s['common']['branches']['avail'].keys(),
+        help='The build branch'
+    )
+    a.add_argument(
+        '--manifest', '-m',
+        action='store',
+        required=True,
+        help='The manifest file'
+    )
     return a.parse_args()
 
 def info_args():
@@ -109,9 +168,22 @@ def info_args():
     :param --images -i: Path to the images folder
     :param --ccmd -c: Checksumming command. calls ``$ccmd $image``
     '''
-    a = ArgumentParser(prog='gluon_builder_gen_info', description='Do not launch manually', epilog='builder.sh needs this while building')
-    a.add_argument('--images', '-i', action='store', required=True, help='The images folder')
-    a.add_argument('--ccmd', '-c', action='store', help='The checksum executable')
+    a = ArgumentParser(
+        prog='gluon_builder_gen_info',
+        description='Do not launch manually',
+        epilog='builder.sh needs this while building'
+    )
+    a.add_argument(
+        '--images', '-i',
+        action='store',
+        required=True,
+        help='The images folder'
+    )
+    a.add_argument(
+        '--ccmd', '-c',
+        action='store',
+        help='The checksum executable'
+    )
     return a.parse_args()
 
 def publish_args():
@@ -122,7 +194,21 @@ def publish_args():
     :param --branch -b: The branch to publish as
     '''
     s = sinit()
-    a = ArgumentParser(prog='gluon_builder_release', description='Release gluon builds', epilog='-.-')
-    a.add_argument('folder', action='store', help='Path to library folder containing build to publish')
-    a.add_argument('--branch', '-b', action='store', required=True, choices=s['common']['branches']['avail'].keys(), help='The release branch')
+    a = ArgumentParser(
+        prog='gluon_builder_release',
+        description='Release gluon builds',
+        epilog='-.-'
+    )
+    a.add_argument(
+        'folder',
+        action='store',
+        help='Path to library folder containing build to publish'
+    )
+    a.add_argument(
+        '--branch', '-b',
+        action='store',
+        required=True,
+        choices=s['common']['branches']['avail'].keys(),
+        help='The release branch'
+    )
     return a.parse_args()

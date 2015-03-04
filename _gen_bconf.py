@@ -19,7 +19,8 @@ def gen_bconf(branch, gt=None, st=None):
     if p.settings.load('siteconf', path.join(s['site']['local']['wi'], s['site']['generator_settings'])):
         p.s2m
 
-        priority, version = s['siteconf']['site']['gluon_priority'], s['siteconf']['site']['gluon_release_num']
+        priority = s['siteconf']['site']['gluon_priority']
+        version = s['siteconf']['site']['gluon_release_num']
         gluon, site = ginit(p)
         gt = gt if gt else gluon.short_commit[0]
         st = st if st else site.short_commit[0]
@@ -36,6 +37,7 @@ def gen_bconf(branch, gt=None, st=None):
             version=version
         )
         write_json(path.join(s['prepare']['stage_dir'], s['prepare']['info']), dict(_info=fields))
+
         fields.update(dict(
             autosign_key=s['publish']['autosign_key'],
             build_branch=s['common']['branches']['build'],

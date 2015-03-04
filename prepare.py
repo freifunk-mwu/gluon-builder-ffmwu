@@ -21,22 +21,39 @@ def prepare(branch, gt=None, st=None, modules=False):
         gluon, site = ginit(p, community)
 
         if gt:
-            if gluon.tag and gt in gluon.tag: gluon.tag = gt
-            elif gluon.commit and gt in gluon.commit or gt in gluon.short_commit: gluon.commit = gt
-            else: p.m('Invalid git commit-id or tag specified for gluon', state=True)
+            if gluon.tag and gt in gluon.tag:
+                gluon.tag = gt
+            elif gluon.commit and gt in gluon.commit or gt in gluon.short_commit:
+                gluon.commit = gt
+            else:
+                p.m('Invalid git commit-id or tag specified for gluon', state=True)
         else:
-            if tags[0]: gluon.tag = None
-            else: gluon.branch = None
+            if tags[0]:
+                gluon.tag = None
+            else:
+                gluon.branch = None
 
         if st:
-            if site.tag and st in site.tag: site.tag = st
-            elif site.commit and st in site.commit or st in site.short_commit: site.commit = st
-            else: p.m('Invalid git commit-id or tag specified for site', state=True)
+            if site.tag and st in site.tag:
+                site.tag = st
+            elif site.commit and st in site.commit or st in site.short_commit:
+                site.commit = st
+            else:
+                p.m('Invalid git commit-id or tag specified for site', state=True)
         else:
-            if tags[1]: site.tag = None
-            else: site.branch = None
+            if tags[1]:
+                site.tag = None
+            else:
+                site.branch = None
 
-        p.m('generating site for %s' %(community), cmdd=dict(cmd='%s generate.py %s %s' %(s['common']['pycmd'], community, '--nomodules' if not modules else ''), cwd=s['site']['local'][community]), verbose=True)
+        p.m(
+            'generating site for %s' %(community),
+            cmdd=dict(
+                cmd='%s generate.py %s %s' %(s['common']['pycmd'], community, '--nomodules' if not modules else ''),
+                cwd=s['site']['local'][community]
+            ),
+            verbose=True
+        )
 
     gen_bconf(branch, gt, st)
 

@@ -23,12 +23,24 @@ def gen_info(images, ccmd):
     for sp in ['factory', 'sysupgrade']:
         im = path.join(images, sp)
         if info and path.exists(im):
-            for iname in listdir(im):
-                model = iname.split('%s-' %(info['_info']['release']))[-1].split('-%s.bin' %(sp))[0].split('.bin')[0]
-                checksum = p.m('checksumming %s' %(model), cmdd=dict(cmd='%s %s' %(path.abspath(ccmd), path.join(im, iname)))).get('out')
+            for imgname in listdir(im):
+                model = imgname.split(
+                    '%s-' %(info['_info']['release'])
+                )[-1].split(
+                    '-%s.bin' %(sp)
+                )[0].split(
+                    '.bin'
+                )[0]
+
+                checksum = p.m(
+                    'checksumming %s' %(model),
+                    cmdd=dict(
+                        cmd='%s %s' %(path.abspath(ccmd), path.join(im, imgname))
+                    )
+                ).get('out')
 
                 info[model] = info.get(model, dict())
-                info[model][sp] = dict(image=iname, checksum=checksum)
+                info[model][sp] = dict(image=imgname, checksum=checksum)
 
             write_json(path.join(images, s['prepare']['info']), info)
 

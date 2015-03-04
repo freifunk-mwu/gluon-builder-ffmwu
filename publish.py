@@ -15,7 +15,14 @@ def publish(folder, branch):
 
     folder = path.realpath(folder)
     if not s['publish']['library_dir'] == path.dirname(folder):
-        p.m('wrong folder selected!', more=dict(folder=folder, should_be_subfolder_of=s['publish']['library_dir']), state=True)
+        p.m(
+            'wrong folder selected!',
+            more=dict(
+                folder=folder,
+                should_be_subfolder_of=s['publish']['library_dir']
+            ),
+            state=True
+        )
 
     for community_s, community_l in s['common']['communities'].items():
         fulltgt = path.join(s['publish']['http_fw_dir'], community_l, branch)
@@ -23,7 +30,14 @@ def publish(folder, branch):
         tgt = path.dirname(fulltgt)
         lnk = path.relpath(path.join(folder, community_s), tgt)
 
-        p.m('linking release', cmdd=dict(cmd='ln -s %s %s' %(lnk, branch), cwd=tgt), more=dict(fulltgt=fulltgt))
+        p.m(
+            'linking release',
+            cmdd=dict(
+                cmd='ln -s %s %s' %(lnk, branch),
+                cwd=tgt
+            ),
+        more=dict(fulltgt=fulltgt)
+        )
 
 if __name__ == '__main__':
     from common import publish_args
