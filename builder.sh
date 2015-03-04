@@ -85,10 +85,10 @@ for C in $COMMUNITIES; do
 
 done
 
+$PYCMD $CDIR/publish.py $LIBRARYDIR -b $CALLBRANCH
+
 # Clean up
 rm -rf $BUILDDIR $STAGEDIR
-
-$PYCMD $CDIR/publish.py $LIBRARYDIR -b $CALLBRANCH
 
 echo "~ finished"
 exit 0
