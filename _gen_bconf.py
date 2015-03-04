@@ -25,7 +25,7 @@ def gen_bconf(branch, gt=None, st=None):
         gt = gt if gt else gluon.short_commit[0]
         st = st if st else site.short_commit[0]
 
-        desc = '-exp-%s' %(get_timestamp(time=False)) if not all(s['common']['branches']['avail'][branch]) else ''
+        desc = '-%s%s' %(branch, '-%s' %(get_timestamp(time=False)) if not all(s['common']['branches']['avail'][branch]) else '')
 
         fields=dict(
             call_branch=branch,
@@ -43,7 +43,7 @@ def gen_bconf(branch, gt=None, st=None):
             build_branch=s['common']['branches']['build'],
             build_dir=s['gluon']['local']['dir'],
             info_file=s['prepare']['info'],
-            library_dir=path.join(s['publish']['library_dir'], '%s-%s%s' %(version, branch, desc)),
+            library_dir=path.join(s['publish']['library_dir'], '%s%s' %(version, desc)),
             mkcmd=s['common']['mkcmd'],
             pycmd=s['common']['pycmd'],
             stage_dir=s['prepare']['stage_dir']
