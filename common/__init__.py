@@ -113,6 +113,11 @@ def prepare_args():
         action='store_true',
         help='Prepare modules in siteconf generator'
     )
+    a.add_argument(
+        '--broken',
+        action='store_true',
+        help='Build also models which are flagged as broken'
+    )
     return a.parse_args()
 
 def log_args():
