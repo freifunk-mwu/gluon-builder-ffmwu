@@ -12,6 +12,7 @@ common:
         wi: 'wiesbaden'
     pycmd: 'python3'
     mkcmd: 'make -j7 V=sss'
+    target: 'ar71xx-generic'
 gluon:
     remote: 'https://github.com/freifunk-gluon/gluon.git'
     local:

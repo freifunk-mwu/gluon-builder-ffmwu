@@ -47,8 +47,8 @@ for C in $COMMUNITIES; do
     # Using GLUON_BRANCH here is the only way to enable the autoupdater, for the Branch BUILDBRANCH.
     # Set BUILDBRANCH to your 'stable' Branch. Any 'experimental' or 'beta' user will auto update to the
     # next 'stable' Release, unless the Autoupdater-Settings on the Node are changed.
-    $LOGP "~ ${C}_$RELEASE ~ images (GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE)" 2>&1 | $LOG
-    $MKCMD GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE BROKEN=$BROKEN 2>&1 | $LOG
+    $LOGP "~ ${C}_$RELEASE ~ images (GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE GLUON_TARGET=$TARGET BROKEN=$BROKEN)" 2>&1 | $LOG
+    $MKCMD GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE GLUON_TARGET=$TARGET BROKEN=$BROKEN 2>&1 | $LOG
 
     # Create a (temporary) manifest
     $LOGP "~ ${C}_$RELEASE ~ manifest (GLUON_BRANCH=$CALLBRANCH GLUON_PRIORITY=$PRIORITY)" 2>&1 | $LOG

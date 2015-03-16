@@ -82,6 +82,7 @@ def prepare_args():
     |argparse| for :func:`prepare`
 
     :param --branch -b: The branch to build
+    :param --target -t: The GLUON_TARGET to build
     :param --gt -g: A git commit-id or tag for gluon
     :param --st -s: A git commit-id or tag for site
     :param --broken: Build experimental images even for unsupported (broken) hardware
@@ -98,6 +99,12 @@ def prepare_args():
         choices=settings['common']['branches']['avail'].keys(),
         default=settings['common']['branches']['noarg'],
         help='The branch to build'
+    )
+    args.add_argument(
+        '--target', '-t',
+        action='store',
+        default=settings['common']['target'],
+        help='The GLUON_TARGET to build'
     )
     args.add_argument(
         '--gt', '-g',
