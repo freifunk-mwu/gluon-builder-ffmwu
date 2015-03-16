@@ -35,17 +35,17 @@ def pinit(mname, clean=False, verbose=True):
     '''
     from photon.util.locations import change_location, search_location
 
-    p = _pinit(mname, verbose)
-    s = p.settings.get
+    photon = _pinit(mname, verbose)
+    settings = photon.settings.get
 
     if clean:
-        change_location(s['prepare']['stage_dir'], False, move=True)
+        change_location(settings['prepare']['stage_dir'], False, move=True)
 
-    p.meta.stage(
-        search_location('builder_meta.json', create_in=s['prepare']['stage_dir']),
+    photon.meta.stage(
+        search_location('builder_meta.json', create_in=settings['prepare']['stage_dir']),
         clean=clean
     )
-    return p, s
+    return photon, settings
 
 def sinit(verbose=False):
     '''
@@ -62,7 +62,7 @@ def sinit(verbose=False):
         verbose=verbose
     ).get
 
-def ginit(p, c='wi'):
+def ginit(photon, community='wi'):
     '''
     Common git handler for Gluon and Site used by :func:`prepare` and :func:`_gen_bconf`
 
@@ -70,10 +70,10 @@ def ginit(p, c='wi'):
     :param c: Short flag of community to use
     '''
 
-    s = p.settings.get
+    settings = photon.settings.get
 
-    gluon = p.git_handler(s['gluon']['local'][c], remote_url=s['gluon']['remote'])
-    site = p.git_handler(s['site']['local'][c], remote_url=s['site']['remote'])
+    gluon = photon.git_handler(settings['gluon']['local'][community], remote_url=settings['gluon']['remote'])
+    site = photon.git_handler(settings['site']['local'][community], remote_url=settings['site']['remote'])
 
     return gluon, site
 
@@ -85,35 +85,35 @@ def prepare_args():
     :param --gt -g: A git commit-id or tag for gluon
     :param --st -s: A git commit-id or tag for site
     '''
-    s = sinit()
-    a = ArgumentParser(
+    settings = sinit()
+    args = ArgumentParser(
         prog='gluon_builder_prepare',
         description='Prepare gluon builds',
         epilog='-.-'
     )
-    a.add_argument(
+    args.add_argument(
         '--branch', '-b',
         action='store',
-        choices=s['common']['branches']['avail'].keys(),
-        default=s['common']['branches']['noarg'],
+        choices=settings['common']['branches']['avail'].keys(),
+        default=settings['common']['branches']['noarg'],
         help='The branch to build'
     )
-    a.add_argument(
+    args.add_argument(
         '--gt', '-g',
         action='store',
         help='A git commit-id or tag for gluon'
     )
-    a.add_argument(
+    args.add_argument(
         '--st', '-s',
         action='store',
         help='A git commit-id or tag for site'
     )
-    a.add_argument(
+    args.add_argument(
         '--modules',
         action='store_true',
         help='Prepare modules in siteconf generator'
     )
-    return a.parse_args()
+    return args.parse_args()
 
 def log_args():
     '''
@@ -121,17 +121,17 @@ def log_args():
 
     :param msg: The log message
     '''
-    a = ArgumentParser(
+    args = ArgumentParser(
         prog='gluon_builder_build_logger',
         description='do not launch manually',
         epilog='builder.sh needs this while building'
     )
-    a.add_argument(
+    args.add_argument(
         'msg',
         action='store',
         help='The log message'
     )
-    return a.parse_args()
+    return args.parse_args()
 
 def uni_args():
     '''
@@ -140,26 +140,26 @@ def uni_args():
     :param --branch -b: The branch the initial manifest was created
     :param --manifest -m: Path to the manifest file
     '''
-    s = sinit()
-    a = ArgumentParser(
+    settings = sinit()
+    args = ArgumentParser(
         prog='gluon_builder_uni_manifest',
         description='Do not launch manually',
         epilog='builder.sh needs this while building'
     )
-    a.add_argument(
+    args.add_argument(
         '--branch', '-b',
         action='store',
         required=True,
-        choices=s['common']['branches']['avail'].keys(),
+        choices=settings['common']['branches']['avail'].keys(),
         help='The build branch'
     )
-    a.add_argument(
+    args.add_argument(
         '--manifest', '-m',
         action='store',
         required=True,
         help='The manifest file'
     )
-    return a.parse_args()
+    return args.parse_args()
 
 def info_args():
     '''
@@ -168,23 +168,23 @@ def info_args():
     :param --images -i: Path to the images folder
     :param --ccmd -c: Checksumming command. calls ``$ccmd $image``
     '''
-    a = ArgumentParser(
+    args = ArgumentParser(
         prog='gluon_builder_gen_info',
         description='Do not launch manually',
         epilog='builder.sh needs this while building'
     )
-    a.add_argument(
+    args.add_argument(
         '--images', '-i',
         action='store',
         required=True,
         help='The images folder'
     )
-    a.add_argument(
+    args.add_argument(
         '--ccmd', '-c',
         action='store',
         help='The checksum executable'
     )
-    return a.parse_args()
+    return args.parse_args()
 
 def publish_args():
     '''
@@ -193,22 +193,22 @@ def publish_args():
     :param folder: Path to library folder containing build to publish
     :param --branch -b: The branch to publish as
     '''
-    s = sinit()
-    a = ArgumentParser(
+    settings = sinit()
+    args = ArgumentParser(
         prog='gluon_builder_release',
         description='Release gluon builds',
         epilog='-.-'
     )
-    a.add_argument(
+    args.add_argument(
         'folder',
         action='store',
         help='Path to library folder containing build to publish'
     )
-    a.add_argument(
+    args.add_argument(
         '--branch', '-b',
         action='store',
         required=True,
-        choices=s['common']['branches']['avail'].keys(),
+        choices=settings['common']['branches']['avail'].keys(),
         help='The release branch'
     )
-    return a.parse_args()
+    return args.parse_args()
