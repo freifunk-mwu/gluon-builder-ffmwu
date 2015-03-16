@@ -61,6 +61,7 @@ For example from our first stable release:
 
     {
         "_info": {
+            "broken_flag": "",
             "call_branch": "stable",
             "communities": "wi mz",
             "gluon_t": "b7187df",

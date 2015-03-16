@@ -1,5 +1,5 @@
 
-def gen_bconf(branch, gt=None, st=None):
+def gen_bconf(branch, gt=None, st=None, broken=False):
     '''
     Provides all information needed by the builder in placing a ``bconf``-file.
 
@@ -24,10 +24,12 @@ def gen_bconf(branch, gt=None, st=None):
         gluon, site = ginit(p)
         gt = gt if gt else gluon.short_commit[0]
         st = st if st else site.short_commit[0]
+        broken = '1' if broken else ''
 
         desc = '-%s%s' %(branch, '-%s' %(get_timestamp(time=False)) if not all(s['common']['branches']['avail'][branch]) else '')
 
         fields=dict(
+            broken_flag=broken,
             call_branch=branch,
             communities=' '.join(s['common']['communities'].keys()),
             gluon_t=gt,
@@ -56,4 +58,4 @@ if __name__ == '__main__':
     from common import prepare_args
 
     a = prepare_args()
-    gen_bconf(a.branch, gt=a.gt, st=a.st)
+    gen_bconf(a.branch, gt=a.gt, st=a.st, broken=a.broken)

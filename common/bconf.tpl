@@ -1,6 +1,7 @@
 # no comment
 
 export AUTOSIGNKEY="${autosign_key}"
+export BROKEN="${broken_flag}"
 export BUILDBRANCH="${build_branch}"
 export BUILDDIR="${build_dir}"
 export CALLBRANCH="${call_branch}"

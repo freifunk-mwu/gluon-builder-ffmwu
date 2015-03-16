@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def prepare(branch, gt=None, st=None, modules=False):
+def prepare(branch, gt=None, st=None, modules=False, broken=False):
     '''
     Checks out Gluon sources and site-conf repositories at proper commit-ids or tags according to the branch to build.
     Generates a site-conf afterwards.
@@ -55,10 +55,10 @@ def prepare(branch, gt=None, st=None, modules=False):
             verbose=True
         )
 
-    gen_bconf(branch, gt, st)
+    gen_bconf(branch, gt, st, broken)
 
 if __name__ == '__main__':
     from common import prepare_args
 
     a = prepare_args()
-    prepare(a.branch, gt=a.gt, st=a.st, modules=a.modules)
+    prepare(a.branch, gt=a.gt, st=a.st, modules=a.modules, broken=a.broken)
