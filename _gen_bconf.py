@@ -14,48 +14,48 @@ def gen_bconf(branch, gt=None, st=None, broken=False):
     from photon.util.files import write_json
     from common import pinit, ginit
 
-    p, s = pinit('gen_bconf')
+    photon, settings = pinit('gen_bconf')
 
-    if p.settings.load('siteconf', path.join(s['site']['local']['wi'], s['site']['generator_settings'])):
-        p.s2m
+    if photon.settings.load('siteconf', path.join(settings['site']['local']['wi'], settings['site']['generator_settings'])):
+        photon.s2m
 
-        priority = s['siteconf']['site']['gluon_priority']
-        version = s['siteconf']['site']['gluon_release_num']
-        gluon, site = ginit(p)
+        priority = settings['siteconf']['site']['gluon_priority']
+        version = settings['siteconf']['site']['gluon_release_num']
+        gluon, site = ginit(photon)
         gt = gt if gt else gluon.short_commit[0]
         st = st if st else site.short_commit[0]
         broken = '1' if broken else ''
 
-        desc = '-%s%s' %(branch, '-%s' %(get_timestamp(time=False)) if not all(s['common']['branches']['avail'][branch]) else '')
+        desc = '-%s%s' %(branch, '-%s' %(get_timestamp(time=False)) if not all(settings['common']['branches']['avail'][branch]) else '')
 
         fields=dict(
             broken_flag=broken,
             call_branch=branch,
-            communities=' '.join(s['common']['communities'].keys()),
+            communities=' '.join(settings['common']['communities'].keys()),
             gluon_t=gt,
             site_t=st,
             priority=priority,
             release='%s%s' %(version, desc),
             version=version
         )
-        write_json(path.join(s['prepare']['stage_dir'], s['prepare']['info']), dict(_info=fields))
+        write_json(path.join(settings['prepare']['stage_dir'], settings['prepare']['info']), dict(_info=fields))
 
         fields.update(dict(
-            autosign_key=s['publish']['autosign_key'],
-            build_branch=s['common']['branches']['build'],
-            build_dir=s['gluon']['local']['dir'],
-            info_file=s['prepare']['info'],
-            library_dir=path.join(s['publish']['library_dir'], '%s%s' %(version, desc)),
-            mkcmd=s['common']['mkcmd'],
-            pycmd=s['common']['pycmd'],
-            stage_dir=s['prepare']['stage_dir']
+            autosign_key=settings['publish']['autosign_key'],
+            build_branch=settings['common']['branches']['build'],
+            build_dir=settings['gluon']['local']['dir'],
+            info_file=settings['prepare']['info'],
+            library_dir=path.join(settings['publish']['library_dir'], '%s%s' %(version, desc)),
+            mkcmd=settings['common']['mkcmd'],
+            pycmd=settings['common']['pycmd'],
+            stage_dir=settings['prepare']['stage_dir']
         ))
 
-        bconf = p.template_handler(s['prepare']['bconf']['tpl'], fields=fields)
-        bconf.write(s['prepare']['bconf']['out'], append=False)
+        bconf = photon.template_handler(settings['prepare']['bconf']['tpl'], fields=fields)
+        bconf.write(settings['prepare']['bconf']['out'], append=False)
 
 if __name__ == '__main__':
     from common import prepare_args
 
-    a = prepare_args()
-    gen_bconf(a.branch, gt=a.gt, st=a.st, broken=a.broken)
+    args = prepare_args()
+    gen_bconf(args.branch, gt=args.gt, st=args.st, broken=args.broken)

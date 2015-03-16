@@ -17,5 +17,5 @@ def build_logger(msg):
 if __name__ == '__main__':
     from common import log_args
 
-    a = log_args()
-    build_logger(a.msg)
+    args = log_args()
+    build_logger(args.msg)

@@ -54,7 +54,7 @@ After this is done, you should have two new files::
 
 The json file in the stage is further processed later in :ref:`info`. It's purpose is to provide a single file to easily include links to the latest firmware in foreign websites. At this stage it only contains a header
 
-For example from our first stable release:
+For example from our first stable (pre-)release:
 
 .. code-block:: json
     :linenos:

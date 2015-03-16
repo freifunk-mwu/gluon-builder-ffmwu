@@ -15,9 +15,9 @@ def gen_info(images, ccmd):
     from photon.util.files import read_json, write_json
     from common import pinit
 
-    p, s = pinit('gen_info', verbose=True)
+    photon, settings = pinit('gen_info', verbose=True)
 
-    info = read_json(path.join(s['prepare']['stage_dir'], s['prepare']['info']))
+    info = read_json(path.join(settings['prepare']['stage_dir'], settings['prepare']['info']))
     images = path.abspath(images)
 
     for sp in ['factory', 'sysupgrade']:
@@ -32,7 +32,7 @@ def gen_info(images, ccmd):
                     '.bin'
                 )[0]
 
-                checksum = p.m(
+                checksum = photon.m(
                     'checksumming %s' %(model),
                     cmdd=dict(
                         cmd='%s %s' %(path.abspath(ccmd), path.join(im, imgname))
@@ -42,12 +42,12 @@ def gen_info(images, ccmd):
                 info[model] = info.get(model, dict())
                 info[model][sp] = dict(image=imgname, checksum=checksum)
 
-            write_json(path.join(images, s['prepare']['info']), info)
+            write_json(path.join(images, settings['prepare']['info']), info)
 
-    p.m('info generated', more=dict(images=images, info=info))
+    photon.m('info generated', more=dict(images=images, info=info))
 
 if __name__ == '__main__':
     from common import info_args
 
-    a = info_args()
-    gen_info(a.images, a.ccmd)
+    args = info_args()
+    gen_info(args.images, args.ccmd)

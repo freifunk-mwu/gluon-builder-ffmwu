@@ -10,27 +10,27 @@ def publish(folder, branch):
     from photon.util.locations import change_location
     from common import _pinit
 
-    p = _pinit('publish')
-    s = p.settings.get
+    photon = _pinit('publish')
+    settings = photon.settings.get
 
     folder = path.realpath(folder)
-    if not s['publish']['library_dir'] == path.dirname(folder):
-        p.m(
+    if not settings['publish']['library_dir'] == path.dirname(folder):
+        photon.m(
             'wrong folder selected!',
             more=dict(
                 folder=folder,
-                should_be_subfolder_of=s['publish']['library_dir']
+                should_be_subfolder_of=settings['publish']['library_dir']
             ),
             state=True
         )
 
-    for community_s, community_l in s['common']['communities'].items():
-        fulltgt = path.join(s['publish']['http_fw_dir'], community_l, branch)
+    for community_s, community_l in settings['common']['communities'].items():
+        fulltgt = path.join(settings['publish']['http_fw_dir'], community_l, branch)
         change_location(fulltgt, False, move=True)
         tgt = path.dirname(fulltgt)
         lnk = path.relpath(path.join(folder, community_s), tgt)
 
-        p.m(
+        photon.m(
             'linking release',
             cmdd=dict(
                 cmd='ln -s %s %s' %(lnk, branch),
@@ -42,5 +42,5 @@ def publish(folder, branch):
 if __name__ == '__main__':
     from common import publish_args
 
-    a = publish_args()
-    publish(a.folder, a.branch)
+    args = publish_args()
+    publish(args.folder, args.branch)

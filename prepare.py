@@ -13,20 +13,20 @@ def prepare(branch, gt=None, st=None, modules=False, broken=False):
     from photon.util.locations import change_location
     from _gen_bconf import gen_bconf
 
-    p, s = pinit('prepare', clean=True)
+    photon, settings = pinit('prepare', clean=True)
 
-    for community in s['common']['communities'].keys():
-        change_location(s['gluon']['local'][community], False, move=True)
-        tags = s['common']['branches']['avail'][branch]
-        gluon, site = ginit(p, community)
+    for community in settings['common']['communities'].keys():
+        change_location(settings['gluon']['local'][community], False, move=True)
+        tags = settings['common']['branches']['avail'][branch]
+        gluon, site = ginit(photon, community=community)
 
         if gt:
             if gluon.tag and gt in gluon.tag:
                 gluon.tag = gt
-            elif gluon.commit and gt in gluon.commit or gt in gluon.short_commit:
+            elif gluon.commit and (gt in gluon.commit or gt in gluon.short_commit):
                 gluon.commit = gt
             else:
-                p.m('Invalid git commit-id or tag specified for gluon', state=True)
+                photon.m('Invalid git commit-id or tag specified for gluon', state=True)
         else:
             if tags[0]:
                 gluon.tag = None
@@ -36,21 +36,21 @@ def prepare(branch, gt=None, st=None, modules=False, broken=False):
         if st:
             if site.tag and st in site.tag:
                 site.tag = st
-            elif site.commit and st in site.commit or st in site.short_commit:
+            elif site.commit and (st in site.commit or st in site.short_commit):
                 site.commit = st
             else:
-                p.m('Invalid git commit-id or tag specified for site', state=True)
+                photon.m('Invalid git commit-id or tag specified for site', state=True)
         else:
             if tags[1]:
                 site.tag = None
             else:
                 site.branch = None
 
-        p.m(
+        photon.m(
             'generating site for %s' %(community),
             cmdd=dict(
-                cmd='%s generate.py %s %s' %(s['common']['pycmd'], community, '--nomodules' if not modules else ''),
-                cwd=s['site']['local'][community]
+                cmd='%s generate.py %s %s' %(settings['common']['pycmd'], community, '--nomodules' if not modules else ''),
+                cwd=settings['site']['local'][community]
             ),
             verbose=True
         )
@@ -60,5 +60,5 @@ def prepare(branch, gt=None, st=None, modules=False, broken=False):
 if __name__ == '__main__':
     from common import prepare_args
 
-    a = prepare_args()
-    prepare(a.branch, gt=a.gt, st=a.st, modules=a.modules, broken=a.broken)
+    args = prepare_args()
+    prepare(args.branch, gt=args.gt, st=args.st, modules=args.modules, broken=args.broken)

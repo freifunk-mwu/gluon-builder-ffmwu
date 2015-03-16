@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Stop the builder on any error
+# Stop the builder on any failed command
 set -e
 set -o pipefail
 
