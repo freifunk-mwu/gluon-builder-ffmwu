@@ -60,21 +60,31 @@ for C in $COMMUNITIES; do
 
     # Now the manifest is fixed, let's autosign
     # Remember to set each 'good_signatures' to 'good_signatures+1' if you place the public part in the site.conf
-    $LOGP "~ ${C}_$RELEASE ~ sign ($AUTOSIGNKEY images/sysupgrade/$CALLBRANCH.manifest)" 2>&1 | $LOG
-    "$WDIR/contrib/sign.sh" $AUTOSIGNKEY "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
+    if [ -f "$AUTOSIGNKEY" ]; then
+        $LOGP "~ ${C}_$RELEASE ~ sign ($AUTOSIGNKEY images/sysupgrade/$CALLBRANCH.manifest)" 2>&1 | $LOG
+        "$WDIR/contrib/sign.sh" $AUTOSIGNKEY "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
+    else
+       $LOGP "~ ${C}_$RELEASE ~ skipping sign, no key found ($AUTOSIGNKEY)" | $LOG
+    fi
 
     # Because we are building multiple communitues the configuration differs
     # For us, it is machine created now, so store the results
     $LOGP "~ ${C}_$RELEASE ~ appendix" 2>&1 | $LOG
-    for c in "$WDIR/site/site.conf" "$WDIR/site/site.mk" "$WDIR/site/modules"; do
-        if [ -f "$c" ]; then cp "$c" "$WDIR/images/"; fi
+    for c in "$WDIR/site/*"; do
+        fn=${c##*/}
+        if [[ "$fn" =~ ^(site.(conf|mk)|modules|i18n)$ ]]; then
+            if [ -f "$c" ]; then cp "$c" "$WDIR/images/";
+            elif [ -d "$c" ]; then cp -r "$c" "$WDIR/images/"; fi
+       fi
     done
 
     # The info file is a json containing a mapping of router models matching image-file names.
     # So let's store the checksums too
     $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -c "$WDIR/scripts/sha512sum.sh"
     for g in images/*/*; do echo "$($WDIR/scripts/sha512sum.sh $g) $g" >> $SUMS; done
-    "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
+    if [ -f "$AUTOSIGNKEY" ]; then
+      "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
+    fi
 
     # Move freshly built images into the library
     # Compress stdio log and copy metadata from stagedir
