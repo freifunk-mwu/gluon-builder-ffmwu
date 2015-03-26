@@ -15,11 +15,6 @@ Welcome to the Gluon Builder Documentation!
 
 .. include:: ../README.rst
 
-Currently required:
-
-.. literalinclude:: ../requirements.txt
-    :linenos:
-
 Contents
 --------
 
