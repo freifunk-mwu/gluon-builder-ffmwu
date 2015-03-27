@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def prepare(branch, target, gt=None, st=None, modules=False, broken=False):
+def prepare(branch, target, gt=None, st=None, nomodules=False, broken=False):
     '''
     Checks out Gluon sources and site-conf repositories at proper commit-ids or tags according to the branch to build.
     Generates a site-conf afterwards.
@@ -49,7 +49,7 @@ def prepare(branch, target, gt=None, st=None, modules=False, broken=False):
         photon.m(
             'generating site for %s' %(community),
             cmdd=dict(
-                cmd='%s generate.py %s %s' %(settings['common']['pycmd'], community, '--nomodules' if not modules else ''),
+                cmd='%s generate.py %s %s' %(settings['common']['pycmd'], community, '--nomodules' if nomodules else ''),
                 cwd=settings['site']['local'][community]
             ),
             verbose=True
@@ -61,4 +61,4 @@ if __name__ == '__main__':
     from common import prepare_args
 
     args = prepare_args()
-    prepare(args.branch, args.target, gt=args.gt, st=args.st, modules=args.modules, broken=args.broken)
+    prepare(args.branch, args.target, gt=args.gt, st=args.st, nomodules=args.nomodules, broken=args.broken)

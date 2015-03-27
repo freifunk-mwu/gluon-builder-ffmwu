@@ -117,9 +117,9 @@ def prepare_args():
         help='A git commit-id or tag for site'
     )
     args.add_argument(
-        '--modules',
+        '--nomodules',
         action='store_true',
-        help='Prepare modules in siteconf generator'
+        help='Do not prepare modules in siteconf generator'
     )
     args.add_argument(
         '--broken',
