@@ -18,7 +18,7 @@ $CDIR/prepare.py $@
 # Check if the prepare helper was successful (and correctly invoked
 # _gen_bconf.py) by checking for the generated bconf file.
 # Deletes bconf immediately, we have the content now stored in the variables
-if [ ! -f "bconf" ]; then echo -e "~ error: no bconf found"; exit 42; fi
+if [ ! -f "$CDIR/bconf" ]; then echo -e "~ error: no bconf found"; exit 42; fi
 . $CDIR/bconf
 rm $CDIR/bconf
 
@@ -87,7 +87,7 @@ for C in $COMMUNITIES; do
     # Because we are building multiple communities the configuration differs
     # For us, it is machine created, so store the results as well
     SITEFILES=("$WDIR/site/site.conf" "$WDIR/site/site.mk" "$WDIR/site/modules" "$WDIR/site/i18n/*.po")
-    tar czfv "$STAGEDIR/${C}_$RELEASE_site.tgz" ${SITEFILES[*]} | $LOG
+    zip -j "$STAGEDIR/${C}_${RELEASE}_site.zip" ${SITEFILES[*]} | $LOG
 
     # Last, copy the stagedir
     cp -rv "$STAGEDIR/." $LIBRARYDIR
