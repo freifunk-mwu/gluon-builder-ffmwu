@@ -1,5 +1,5 @@
 
-def gen_bconf(branch, target, gt=None, st=None, broken=False, oneonly=False):
+def gen_bconf(branch, target, signkey, gt=None, st=None, broken=False, oneonly=False):
     '''
     Provides all information needed by the builder in placing a ``bconf``-file.
 
@@ -41,13 +41,13 @@ def gen_bconf(branch, target, gt=None, st=None, broken=False, oneonly=False):
         write_json(path.join(settings['prepare']['stage_dir'], settings['prepare']['info']), dict(_info=fields))
 
         fields.update(dict(
-            autosign_key=settings['publish']['autosign_key'],
             build_branch=settings['common']['branches']['build'],
             build_dir=settings['gluon']['local']['dir'],
             info_file=settings['prepare']['info'],
             library_dir=path.join(settings['publish']['library_dir'], '%s%s' %(version, desc)),
             mkcmd=settings['common']['mkcmd'],
             pycmd=settings['common']['pycmd'],
+            signkey=signkey,
             stage_dir=settings['prepare']['stage_dir'],
             target=target
         ))
@@ -59,4 +59,4 @@ if __name__ == '__main__':
     from common import prepare_args
 
     args = prepare_args()
-    gen_bconf(args.branch, args.target, gt=args.gt, st=args.st, broken=args.broken)
+    gen_bconf(args.branch, args.target, args.signkey, gt=args.gt, st=args.st, broken=args.broken)

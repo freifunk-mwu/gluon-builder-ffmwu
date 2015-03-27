@@ -58,24 +58,24 @@ for C in $COMMUNITIES; do
     # Rewrites the manifest and creates symlinks for each branch onto it: ./$branch.manifest -> ./manifest
     $PYCMD $CDIR/_uni_manifest.py -b $CALLBRANCH -m "$WDIR/images/sysupgrade/$CALLBRANCH.manifest"
 
-    # Now the manifest is fixed, let's autosign
-    # Remember to set each 'good_signatures' to 'good_signatures+1' if you place the public part in the site.conf
-    if [ -f "$AUTOSIGNKEY" ]; then
-        $LOGP "~ ${C}_$RELEASE ~ sign ($AUTOSIGNKEY images/sysupgrade/$CALLBRANCH.manifest)" 2>&1 | $LOG
-        "$WDIR/contrib/sign.sh" $AUTOSIGNKEY "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
+    # Now the manifest is fixed, let's sign!
+    # Remember to increase the 'good_signatures' in your siteconf if signing automatically.
+    if [ -f "$SIGNKEY" ]; then
+        $LOGP "~ ${C}_$RELEASE ~ sign ($SIGNKEY images/sysupgrade/$CALLBRANCH.manifest)" 2>&1 | $LOG
+        "$WDIR/contrib/sign.sh" $SIGNKEY "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
     else
-        $LOGP "~ ${C}_$RELEASE ~ skipping signing, no key found ($AUTOSIGNKEY)" | $LOG
+        $LOGP "~ ${C}_$RELEASE ~ skipping signing, no key found ($SIGNKEY)" | $LOG
     fi
 
     # Hard part is done
     $LOGP "~ ${C}_$RELEASE ~ appendix" 2>&1 | $LOG
 
     # The info file is a json containing a mapping of router models matching image-file names.
-    # So let's store the checksums too
+    # So let's store the checksums too.
     $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -c "$WDIR/scripts/sha512sum.sh"
     for g in images/*/*; do echo "$($WDIR/scripts/sha512sum.sh $g) $g" >> $SUMS; done
-    if [ -f "$AUTOSIGNKEY" ]; then
-        "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
+    if [ -f "$SIGNKEY" ]; then
+        "$WDIR/contrib/sign.sh" $SIGNKEY $SUMS 2>&1 | $LOG
     fi
 
     # Move freshly built images into the library
@@ -84,19 +84,20 @@ for C in $COMMUNITIES; do
     cp -rv "$WDIR/images/." "$LIBRARYDIR/${C}/" 2>&1 | $LOG
     gzip $LOGF
 
-    # Because we are building multiple communities the configuration differs
-    # For us, it is machine created, so store the results as well
+    # Because we are building multiple communities the configuration differs.
+    # For us, it is machine created, so store the results as well.
     SITEFILES=("$WDIR/site/site.conf" "$WDIR/site/site.mk" "$WDIR/site/modules" "$WDIR/site/i18n/*.po")
     zip -j "$STAGEDIR/${C}_${RELEASE}_site.zip" ${SITEFILES[*]} | $LOG
 
-    # Last, copy the stagedir
+    # Last, copy the stagedir.
     cp -rv "$STAGEDIR/." $LIBRARYDIR
 
 done
 
+# Set symlinks to the fresh release for the autoupdater.
 $PYCMD $CDIR/publish.py $LIBRARYDIR -b $CALLBRANCH
 
-# Clean up
+# Clean up afterwards.
 rm -rf $BUILDDIR $STAGEDIR
 
 echo "~ finished"

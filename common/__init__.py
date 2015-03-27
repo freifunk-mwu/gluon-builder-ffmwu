@@ -117,14 +117,19 @@ def prepare_args():
         help='A git commit-id or tag for site'
     )
     args.add_argument(
-        '--nomodules',
-        action='store_true',
-        help='Do not prepare modules in siteconf generator'
-    )
-    args.add_argument(
         '--broken',
         action='store_true',
         help='Build also models which are flagged as broken'
+    )
+    args.add_argument(
+        '--signkey',
+        action='store',
+        default=settings['publish']['autosign_key']
+    )
+    args.add_argument(
+        '--nomodules',
+        action='store_true',
+        help='Do not prepare modules in siteconf generator'
     )
     args.add_argument(
         '--oneonly', '-oo',

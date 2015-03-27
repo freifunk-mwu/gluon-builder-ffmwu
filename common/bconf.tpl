@@ -1,6 +1,5 @@
 # no comment
 
-export AUTOSIGNKEY="${autosign_key}"
 export BROKEN="${broken_flag}"
 export BUILDBRANCH="${build_branch}"
 export BUILDDIR="${build_dir}"
@@ -12,5 +11,6 @@ export MKCMD="${mkcmd}"
 export PRIORITY="${priority}"
 export PYCMD="${pycmd}"
 export RELEASE="${release}"
+export SIGNKEY="${signkey}"
 export STAGEDIR="${stage_dir}"
 export TARGET="${target}"
