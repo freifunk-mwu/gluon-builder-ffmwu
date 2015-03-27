@@ -18,7 +18,7 @@ $CDIR/prepare.py $@
 # Check if the prepare helper was successful (and correctly invoked
 # _gen_bconf.py) by checking for the generated bconf file.
 # Deletes bconf immediately, we have the content now stored in the variables
-if [ ! -f "bconf" ]; then echo -e "~ error: no bconf found"; exit 42; fi
+if [ ! -f "$CDIR/bconf" ]; then echo -e "~ error: no bconf found"; exit 42; fi
 . $CDIR/bconf
 rm $CDIR/bconf
 
