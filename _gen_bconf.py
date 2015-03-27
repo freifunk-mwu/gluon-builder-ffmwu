@@ -1,5 +1,5 @@
 
-def gen_bconf(branch, target, gt=None, st=None, broken=False):
+def gen_bconf(branch, target, gt=None, st=None, broken=False, oneonly=False):
     '''
     Provides all information needed by the builder in placing a ``bconf``-file.
 
@@ -31,7 +31,7 @@ def gen_bconf(branch, target, gt=None, st=None, broken=False):
         fields=dict(
             broken_flag=broken,
             call_branch=branch,
-            communities=' '.join(settings['common']['communities'].keys()),
+            communities=oneonly if oneonly else ' '.join(settings['common']['communities'].keys()),
             gluon_t=gt,
             site_t=st,
             priority=priority,

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def prepare(branch, target, gt=None, st=None, nomodules=False, broken=False):
+def prepare(branch, target, gt=None, st=None, nomodules=False, broken=False, oneonly=False):
     '''
     Checks out Gluon sources and site-conf repositories at proper commit-ids or tags according to the branch to build.
     Generates a site-conf afterwards.
@@ -15,7 +15,7 @@ def prepare(branch, target, gt=None, st=None, nomodules=False, broken=False):
 
     photon, settings = pinit('prepare', clean=True)
 
-    for community in settings['common']['communities'].keys():
+    for community in [oneonly] if oneonly else settings['common']['communities'].keys():
         change_location(settings['gluon']['local'][community], False, move=True)
         tags = settings['common']['branches']['avail'][branch]
         gluon, site = ginit(photon, community=community)
@@ -55,10 +55,10 @@ def prepare(branch, target, gt=None, st=None, nomodules=False, broken=False):
             verbose=True
         )
 
-    gen_bconf(branch, target, gt, st, broken)
+    gen_bconf(branch, target, gt=gt, st=st, broken=broken, oneonly=oneonly)
 
 if __name__ == '__main__':
     from common import prepare_args
 
     args = prepare_args()
-    prepare(args.branch, args.target, gt=args.gt, st=args.st, nomodules=args.nomodules, broken=args.broken)
+    prepare(args.branch, args.target, gt=args.gt, st=args.st, nomodules=args.nomodules, broken=args.broken, oneonly=args.oneonly)

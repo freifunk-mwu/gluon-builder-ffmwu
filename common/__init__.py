@@ -126,6 +126,12 @@ def prepare_args():
         action='store_true',
         help='Build also models which are flagged as broken'
     )
+    args.add_argument(
+        '--oneonly', '-oo',
+        action='store',
+        choices=settings['common']['communities'].keys(),
+        help='Build only one Community, skip the other'
+    )
     return args.parse_args()
 
 def log_args():
