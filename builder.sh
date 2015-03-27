@@ -64,26 +64,18 @@ for C in $COMMUNITIES; do
         $LOGP "~ ${C}_$RELEASE ~ sign ($AUTOSIGNKEY images/sysupgrade/$CALLBRANCH.manifest)" 2>&1 | $LOG
         "$WDIR/contrib/sign.sh" $AUTOSIGNKEY "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
     else
-       $LOGP "~ ${C}_$RELEASE ~ skipping sign, no key found ($AUTOSIGNKEY)" | $LOG
+        $LOGP "~ ${C}_$RELEASE ~ skipping signing, no key found ($AUTOSIGNKEY)" | $LOG
     fi
 
-    # Because we are building multiple communitues the configuration differs
-    # For us, it is machine created now, so store the results
+    # Hard part is done
     $LOGP "~ ${C}_$RELEASE ~ appendix" 2>&1 | $LOG
-    for c in "$WDIR/site/*"; do
-        fn=${c##*/}
-        if [[ "$fn" =~ ^(site.(conf|mk)|modules|i18n)$ ]]; then
-            if [ -f "$c" ]; then cp "$c" "$WDIR/images/";
-            elif [ -d "$c" ]; then cp -r "$c" "$WDIR/images/"; fi
-       fi
-    done
 
     # The info file is a json containing a mapping of router models matching image-file names.
     # So let's store the checksums too
     $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -c "$WDIR/scripts/sha512sum.sh"
     for g in images/*/*; do echo "$($WDIR/scripts/sha512sum.sh $g) $g" >> $SUMS; done
     if [ -f "$AUTOSIGNKEY" ]; then
-      "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
+        "$WDIR/contrib/sign.sh" $AUTOSIGNKEY $SUMS 2>&1 | $LOG
     fi
 
     # Move freshly built images into the library
@@ -91,6 +83,13 @@ for C in $COMMUNITIES; do
     mkdir -p "$LIBRARYDIR/${C}" 2>&1 | $LOG
     cp -rv "$WDIR/images/." "$LIBRARYDIR/${C}/" 2>&1 | $LOG
     gzip $LOGF
+
+    # Because we are building multiple communities the configuration differs
+    # For us, it is machine created, so store the results as well
+    SITEFILES=("$WDIR/site/site.conf" "$WDIR/site/site.mk" "$WDIR/site/modules" "$WDIR/site/i18n/*.po")
+    tar czfv "$STAGEDIR/${C}_$RELEASE_site.tgz" ${SITEFILES[*]} | $LOG
+
+    # Last, copy the stagedir
     cp -rv "$STAGEDIR/." $LIBRARYDIR
 
 done
