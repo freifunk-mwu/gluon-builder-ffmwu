@@ -18,7 +18,6 @@ common:
         - 'mpc85xx-generic'
         - 'x86-generic'
         - 'x86-kvm_guest'
-        - 'ramips-rt305x'
 gluon:
     remote: 'https://github.com/freifunk-gluon/gluon.git'
     local:
