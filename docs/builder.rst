@@ -4,6 +4,28 @@ The builder
 
 Below is the full source of the build script with comments in it.
 
+.. _commandline:
+
+commandline
+-----------
+
+The primary goal of the builder is to run unattended in the crontab. So a simple ``./builder.sh`` without any arguments builds a new experimental from the most recent sources.
+
+* Use  the ``-b`` Flag to specify a branch to build. The builder will checkout the following if no ``-gt`` (gluon tag or commit id) or ``-st`` (site tag or commit id) is given:
+
+============ ================ ==============
+branch       gluon            site
+============ ================ ==============
+experimental latest commit    latest commit
+beta         latest tag       latest commit
+stable       latest tag       latest tag
+============ ================ ==============
+
+* Use ``--broken`` to build images for unsupported (broken) hardware.
+* Use ``--target`` or ``-t`` to specify a list of platforms to build images for, e.g. ``-t ar71xx-generic x86-generic`` for two platforms (this overwrites the default setting, of building all available).
+
+* See ``./builder.sh --help`` for more, or see :func:`common.prepare_args` for more.
+
 .. _builder:
 
 builder.sh

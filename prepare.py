@@ -60,4 +60,4 @@ if __name__ == '__main__':
 
     args = prepare_args()
     prepare(args.branch, gt=args.gt, st=args.st, nomodules=args.nomodules, oneonly=args.oneonly)
-    gen_bconf(args.branch, args.target, args.signkey, gt=args.gt, st=args.st, broken=args.broken, oneonly=args.oneonly)
+    gen_bconf(args.branch, args.targets, args.signkey, gt=args.gt, st=args.st, broken=args.broken, oneonly=args.oneonly)

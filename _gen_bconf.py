@@ -1,5 +1,5 @@
 
-def gen_bconf(branch, target, signkey, gt=None, st=None, broken=False, oneonly=False):
+def gen_bconf(branch, targets, signkey, gt=None, st=None, broken=False, oneonly=False):
     '''
     Provides all information needed by the builder in placing a ``bconf``-file.
 
@@ -49,7 +49,7 @@ def gen_bconf(branch, target, signkey, gt=None, st=None, broken=False, oneonly=F
             pycmd=settings['common']['pycmd'],
             signkey=signkey,
             stage_dir=settings['prepare']['stage_dir'],
-            target=target
+            targets=' '.join(targets)
         ))
 
         bconf = photon.template_handler(settings['prepare']['bconf']['tpl'], fields=fields)
@@ -59,4 +59,4 @@ if __name__ == '__main__':
     from common import prepare_args
 
     args = prepare_args()
-    gen_bconf(args.branch, args.target, args.signkey, gt=args.gt, st=args.st, broken=args.broken)
+    gen_bconf(args.branch, args.targets, args.signkey, gt=args.gt, st=args.st, broken=args.broken)
