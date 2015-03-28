@@ -26,6 +26,7 @@ rm $CDIR/bconf
 LOGP="$PYCMD $CDIR/_build_logger.py"
 
 for C in $COMMUNITIES; do
+    START=$(date +%s)
     WDIR="$BUILDDIR/$C"
     SUMS="$STAGEDIR/${C}_$RELEASE.sha512"
     LOGF="$STAGEDIR/${C}_$RELEASE.log"
@@ -72,7 +73,7 @@ for C in $COMMUNITIES; do
 
     # The info file is a json containing a mapping of router models matching image-file names.
     # So let's store the checksums too.
-    $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -c "$WDIR/scripts/sha512sum.sh"
+    $PYCMD $CDIR/_gen_info.py -i "$WDIR/images" -c "$WDIR/scripts/sha512sum.sh" --start $START --finish $(date +%s)
     for g in images/*/*; do echo "$($WDIR/scripts/sha512sum.sh $g) $g" >> $SUMS; done
     if [ -f "$SIGNKEY" ]; then
         "$WDIR/contrib/sign.sh" $SIGNKEY $SUMS 2>&1 | $LOG

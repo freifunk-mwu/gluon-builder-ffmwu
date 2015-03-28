@@ -86,6 +86,9 @@ def prepare_args():
     :param --gt -g: A git commit-id or tag for gluon
     :param --st -s: A git commit-id or tag for site
     :param --broken: Build experimental images even for unsupported (broken) hardware
+    :param --signkey: Specify location to a key to sign the images
+    :param --nomodules: Prevent building modules (will be passed to siteconf generator)
+    :param --oneonly: Just build images for specified community (only used for testing purposes)
     '''
     settings = sinit()
     args = ArgumentParser(
@@ -191,6 +194,8 @@ def info_args():
 
     :param --images -i: Path to the images folder
     :param --ccmd -c: Checksumming command. calls ``$ccmd $image``
+    :param --start: Calculates build duration if passed together with ``--finish``
+    :param --finish: Calculates build duration if passed together with ``--start``
     '''
     args = ArgumentParser(
         prog='gluon_builder_gen_info',
@@ -207,6 +212,16 @@ def info_args():
         '--ccmd', '-c',
         action='store',
         help='The checksum executable'
+    )
+    args.add_argument(
+        '--start',
+        action='store',
+        help='give me a date to calculate statistics'
+    )
+    args.add_argument(
+        '--finish',
+        action='store',
+        help='give me a date to calculate statistics'
     )
     return args.parse_args()
 

@@ -1,5 +1,5 @@
 
-def gen_info(images, ccmd):
+def gen_info(images, ccmd, start=None, finish=None):
     '''
     Before the build gets started, :ref:`bconf` starts the there ``info.json`` with some general information.
     It's purpose is to provide a single file to easily include links to the latest firmware in foreign websites.
@@ -19,6 +19,9 @@ def gen_info(images, ccmd):
 
     info = read_json(path.join(settings['prepare']['stage_dir'], settings['prepare']['info']))
     images = path.abspath(images)
+
+    if start and finish:
+        info['_build_duration'] = int(finish) - int(start)
 
     for sp in ['factory', 'sysupgrade']:
         im = path.join(images, sp)
