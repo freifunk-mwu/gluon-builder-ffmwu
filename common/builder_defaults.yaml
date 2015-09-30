@@ -15,7 +15,11 @@ common:
     targets:
         - 'ar71xx-generic'
         - 'ar71xx-nand'
+        - 'brcm2708-bcm2708'
+        - 'brcm2708-bcm2709'
         - 'mpc85xx-generic'
+        - 'sunxi'
+        - 'x86-64'
         - 'x86-generic'
         - 'x86-kvm_guest'
 gluon:
