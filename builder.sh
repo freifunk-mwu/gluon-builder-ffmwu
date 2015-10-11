@@ -41,6 +41,9 @@ for C in $COMMUNITIES; do
     $LOGP "~ ${C}_$RELEASE ~ update" 2>&1 | $LOG
     $MKCMD update 2>&1 | $LOG
 
+    # patching openwrt for ati pata support
+    echo "CONFIG_PATA_ATIIXP=y" >>  "$WDIR/openwrt/target/linux/x86/generic/config-default"
+
     # BUILDBRANCH is set in the defaults (['common']['branches']['build']), it could be anything,
     # but should occur in your available branches (['common']['branches']['avail']) for correct replacing
     # of branches in _uni_manifest.py (below)
