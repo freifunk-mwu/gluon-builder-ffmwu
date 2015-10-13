@@ -23,25 +23,49 @@ def uni_manifest(branch, manifest):
     mf = read_file(manifest)
     if mf and mf.count('BRANCH=') == 1:
 
-        uni_branch = '\n'.join('BRANCH=%s' %(branch) for branch in sorted(settings['common']['branches']['avail'].keys()))
+        uni_branch = '\n'.join(
+            'BRANCH=%s' % (branch) for branch in sorted(
+                settings['common']['branches']['avail'].keys()
+            )
+        )
         m = photon.template_handler(
-            mf.replace('BRANCH=%s' %(branch), '${uni_branch}'),
+            mf.replace('BRANCH=%s' % (branch), '${uni_branch}'),
             fields=dict(uni_branch=uni_branch)
         )
         change_location(manifest, False, move=True)
-        m.write(manifest.replace('%s.manifest' %(branch), 'manifest'), append=False)
+        m.write(
+            manifest.replace(
+                '%s.manifest' % (branch), 'manifest'
+            ),
+            append=False
+        )
 
         for b in settings['common']['branches']['avail'].keys():
-            ml = manifest.replace('%s.manifest' %(branch), '%s.manifest' %(b))
+            ml = manifest.replace(
+                '%s.manifest' % (branch), '%s.manifest' % (b)
+            )
 
             change_location(ml, False, move=True)
             photon.m(
-                'linking manifests %s' %(ml),
-                cmdd=dict(cmd='ln -s manifest %s' %(path.basename(ml)), cwd=path.dirname(ml))
+                'linking manifests %s' % (ml),
+                cmdd=dict(
+                    cmd='ln -s manifest %s' % (path.basename(ml)),
+                    cwd=path.dirname(ml)
+                )
             )
 
-        photon.m('uni_manifest written', more=dict(branch=branch), verbose=True)
-    else: photon.m('Refusing to write uni_manifest', more=dict(branch=branch, manifest=manifest), state=False)
+        photon.m(
+            'uni_manifest written',
+            more=dict(branch=branch),
+            verbose=True
+        )
+
+    else:
+        photon.m(
+            'Refusing to write uni_manifest',
+            more=dict(branch=branch, manifest=manifest),
+            state=False
+        )
 
 if __name__ == '__main__':
     args = uni_args()

@@ -23,9 +23,10 @@ def _pinit(mname, verbose=True):
     return Photon(
         DEFAULTS,
         config=None,
-        meta='builder_%s_meta.json' %(mname),
+        meta='builder_%s_meta.json' % (mname),
         verbose=verbose
     )
+
 
 def pinit(mname, clean=False, verbose=True):
     '''
@@ -44,10 +45,14 @@ def pinit(mname, clean=False, verbose=True):
         change_location(settings['prepare']['stage_dir'], False, move=True)
 
     photon.meta.stage(
-        search_location('builder_meta.json', create_in=settings['prepare']['stage_dir']),
+        search_location(
+            'builder_meta.json',
+            create_in=settings['prepare']['stage_dir']
+        ),
         clean=clean
     )
     return photon, settings
+
 
 def sinit(verbose=False):
     '''
@@ -62,6 +67,7 @@ def sinit(verbose=False):
         verbose=verbose
     ).get
 
+
 def ginit(photon, community='wi'):
     '''
     Common git handler for Gluon and Site used by :func:`prepare` and :func:`_gen_bconf`
@@ -69,13 +75,18 @@ def ginit(photon, community='wi'):
     :param p: A photon instance
     :param c: Short flag of community to use
     '''
-
     settings = photon.settings.get
 
-    gluon = photon.git_handler(settings['gluon']['local'][community], remote_url=settings['gluon']['remote'])
-    site = photon.git_handler(settings['site']['local'][community], remote_url=settings['site']['remote'])
-
+    gluon = photon.git_handler(
+        settings['gluon']['local'][community],
+        remote_url=settings['gluon']['remote']
+    )
+    site = photon.git_handler(
+        settings['site']['local'][community],
+        remote_url=settings['site']['remote']
+    )
     return gluon, site
+
 
 def prepare_args():
     '''
@@ -143,6 +154,7 @@ def prepare_args():
     )
     return args.parse_args()
 
+
 def log_args():
     '''
     |argparse| for :func:`_build_logger`
@@ -160,6 +172,7 @@ def log_args():
         help='The log message'
     )
     return args.parse_args()
+
 
 def uni_args():
     '''
@@ -188,6 +201,7 @@ def uni_args():
         help='The manifest file'
     )
     return args.parse_args()
+
 
 def info_args():
     '''
@@ -225,6 +239,7 @@ def info_args():
         help='give me a date to calculate statistics'
     )
     return args.parse_args()
+
 
 def publish_args():
     '''

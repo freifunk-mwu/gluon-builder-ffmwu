@@ -18,7 +18,10 @@ def gen_info(images, ccmd, start=None, finish=None):
     '''
     photon, settings = pinit('gen_info', verbose=True)
 
-    info = read_json(path.join(settings['prepare']['stage_dir'], settings['prepare']['info']))
+    info = read_json(path.join(
+        settings['prepare']['stage_dir'],
+        settings['prepare']['info']
+    ))
     images = path.abspath(images)
 
     if start and finish:
@@ -29,17 +32,20 @@ def gen_info(images, ccmd, start=None, finish=None):
         if info and path.exists(im):
             for imgname in listdir(im):
                 model = imgname.split(
-                    '%s-' %(info['_info']['release'])
+                    '%s-' % (info['_info']['release'])
                 )[-1].split(
-                    '-%s.bin' %(sp)
+                    '-%s.bin' % (sp)
                 )[0].split(
                     '.bin'
                 )[0]
 
                 checksum = photon.m(
-                    'checksumming %s' %(model),
+                    'checksumming %s' % (model),
                     cmdd=dict(
-                        cmd='%s %s' %(path.abspath(ccmd), path.join(im, imgname))
+                        cmd='%s %s' % (
+                            path.abspath(ccmd),
+                            path.join(im, imgname)
+                        )
                     )
                 ).get('out')
 
