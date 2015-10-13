@@ -11,15 +11,14 @@ if [ "$EUID" -eq 0 ]; then
 fi
 
 # Locates own directory
-# CDIR is used later on for calling helper scripts with their correct path
-CDIR=$(cd "$(dirname "$0")"; pwd)
+CURRENTDIR=$(cd "$(dirname "$0")"; pwd)
 
-BCONF="$CDIR/bconf"
-BUILDLOGGER="$CDIR/_build_logger.py"
-GENINFO="$CDIR/_gen_info.py"
-PREPARE="$CDIR/prepare.py"
-PUBLISH="$CDIR/publish.py"
-UNIMANIFEST="$CDIR/_uni_manifest.py"
+BCONF="$CURRENTDIR/bconf"
+BUILDLOGGER="$CURRENTDIR/_build_logger.py"
+GENINFO="$CURRENTDIR/_gen_info.py"
+PREPARE="$CURRENTDIR/prepare.py"
+PUBLISH="$CURRENTDIR/publish.py"
+UNIMANIFEST="$CURRENTDIR/_uni_manifest.py"
 
 # Run the prepare.py helper script, passing all arguments into it.
 # Let Python do the argument parsing!
@@ -28,7 +27,7 @@ $PREPARE "$@"
 # Check if the prepare helper was successful (and correctly invoked
 # _gen_bconf.py) by checking for the generated bconf file.
 # Deletes bconf immediately, we have the content now stored in the variables
-if [ ! -f "$CDIR/bconf" ]; then
+if [ ! -f "$BCONF" ]; then
     echo -e "~ error: no bconf found"
     exit 42
 fi
