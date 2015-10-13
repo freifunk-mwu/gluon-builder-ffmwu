@@ -2,16 +2,16 @@ common:
     branches:
         avail:
             # branch-name: [gluon-tag, site-tag]
-            experimental:   [false, false]
             beta:           [true, false]
+            experimental:   [false, false]
             stable:         [true, true]
         build: stable
         noarg: experimental
     communities:
         mz: 'mainz'
         wi: 'wiesbaden'
-    pycmd: 'python3'
     mkcmd: 'make -j7 V=sss'
+    pycmd: 'python3'
     targets:
         - 'ar71xx-generic'
         - 'ar71xx-nand'
@@ -23,27 +23,27 @@ common:
         - 'x86-generic'
         - 'x86-kvm_guest'
 gluon:
+    local:
+        dir: &LOCAL_DIR !loc_join ['home_dir', 'gluon_builder']
+        mz: &BUILD_MZ !loc_join [*LOCAL_DIR, 'mz']
+        wi: &BUILD_WI !loc_join [*LOCAL_DIR, 'wi']
     remote: 'https://github.com/freifunk-gluon/gluon.git'
-    local:
-        dir: &L_DIR !loc_join ['home_dir', 'gluon_builder']
-        mz: &B_MZ !loc_join [*L_DIR, 'mz']
-        wi: &B_WI !loc_join [*L_DIR, 'wi']
 site:
-    remote: 'https://github.com/freifunk-mwu/site-ffmwu.git'
-    local:
-        mz: !loc_join [*B_MZ, 'site']
-        wi: !loc_join [*B_WI, 'site']
     generator_settings: 'settings.yaml'
+    local:
+        mz: !loc_join [*BUILD_MZ, 'site']
+        wi: !loc_join [*BUILD_WI, 'site']
+    remote: 'https://github.com/freifunk-mwu/site-ffmwu.git'
 publish:
     autosign_key: !loc_join ['home_dir', '.ecdsa', !str_join ['hostname', '.prv']]
-    http_root_dir: &H_DIR !loc_join ['/var/www/html']
-    archive_dir: !loc_join [*H_DIR, '_archive']
-    http_fw_dir: &F_DIR !loc_join [*H_DIR, 'firmware']
-    library_dir: !loc_join [*F_DIR, '_library']
+    http_root_dir: &HTTP_DIR !loc_join ['/var/www/html']
+    archive_dir: !loc_join [*HTTP_DIR, '_archive']
+    http_fw_dir: &HTTPFW_DIR !loc_join [*HTTP_DIR, 'firmware']
+    library_dir: !loc_join [*HTTPFW_DIR, '_library']
 prepare:
     bconf:
         out: !loc_join ['call_dir', 'bconf']
         tpl: !loc_join ['call_dir', 'common', 'bconf.tpl']
     info: 'info.json'
-    stage_dir: !loc_join [*H_DIR, '_stage']
+    stage_dir: !loc_join [*HTTP_DIR, '_stage']
 
