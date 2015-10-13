@@ -6,7 +6,7 @@ from _gen_bconf import gen_bconf
 from common import ginit, pinit, prepare_args
 
 
-def prepare(branch, gt=None, st=None, nomodules=False, oneonly=False):
+def prepare(branch, gt=None, st=None, nomodules=False, onlyone=False):
     '''
     Checks out Gluon sources and site-conf repositories at proper commit-ids
     or tags according to the branch to build.
@@ -18,8 +18,8 @@ def prepare(branch, gt=None, st=None, nomodules=False, oneonly=False):
     photon, settings = pinit('prepare', clean=True)
 
     for community in [
-        oneonly
-    ] if oneonly else settings['common']['communities'].keys():
+        onlyone
+    ] if onlyone else settings['common']['communities'].keys():
 
         change_location(
             settings['gluon']['local'][community],
@@ -85,7 +85,7 @@ if __name__ == '__main__':
         gt=args.gt,
         st=args.st,
         nomodules=args.nomodules,
-        oneonly=args.oneonly
+        onlyone=args.onlyone
     )
     gen_bconf(
         args.branch,
@@ -94,5 +94,5 @@ if __name__ == '__main__':
         gt=args.gt,
         st=args.st,
         broken=args.broken,
-        oneonly=args.oneonly
+        onlyone=args.onlyone
     )

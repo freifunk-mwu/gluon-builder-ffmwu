@@ -7,7 +7,7 @@ from common import ginit, pinit, prepare_args
 
 
 def gen_bconf(
-    branch, targets, signkey, gt=None, st=None, broken=False, oneonly=False
+    branch, targets, signkey, gt=None, st=None, broken=False, onlyone=False
 ):
     '''
     Provides all information needed by the builder in placing a ``bconf``-file.
@@ -46,7 +46,7 @@ def gen_bconf(
         fields = dict(
             broken_flag=broken,
             call_branch=branch,
-            communities=oneonly if oneonly else ' '.join(
+            communities=onlyone if onlyone else ' '.join(
                 settings['common']['communities'].keys()
             ),
             gluon_t=gt,

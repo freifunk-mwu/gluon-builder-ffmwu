@@ -107,7 +107,7 @@ def prepare_args():
     :param --signkey: Specify location to a key to sign the images
     :param --nomodules: Prevent building modules
         (will be passed to siteconf generator)
-    :param --oneonly: Just build images for specified community
+    :param --onlyone: Just build images for specified community
         (only used for testing purposes)
     '''
     settings = sinit()
@@ -156,7 +156,7 @@ def prepare_args():
         help='Do not prepare modules in siteconf generator'
     )
     args.add_argument(
-        '--oneonly', '-oo',
+        '--onlyone', '-oo',
         action='store',
         choices=settings['common']['communities'].keys(),
         help='Build only one Community, skip the other'
