@@ -53,6 +53,7 @@ def gen_bconf(
             site_t=st,
             priority=priority,
             release='%s%s' % (version, desc),
+            targets=' '.join(targets),
             version=version
         )
         write_json(
@@ -73,8 +74,7 @@ def gen_bconf(
             mkcmd=settings['common']['mkcmd'],
             pycmd=settings['common']['pycmd'],
             signkey=signkey,
-            stage_dir=settings['prepare']['stage_dir'],
-            targets=' '.join(targets)
+            stage_dir=settings['prepare']['stage_dir']
         ))
 
         bconf = photon.template_handler(
