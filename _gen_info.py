@@ -30,7 +30,7 @@ def gen_info(images, ccmd, start=None, finish=None):
     images = path.abspath(images)
 
     if start and finish:
-        info['_build_duration'] = abs(int(finish) - int(start))
+        info['_info']['build_duration'] = abs(int(finish) - int(start))
 
     for sp in ['factory', 'sysupgrade']:
         im = path.join(images, sp)
@@ -64,4 +64,4 @@ def gen_info(images, ccmd, start=None, finish=None):
 
 if __name__ == '__main__':
     args = info_args()
-    gen_info(args.images, args.ccmd)
+    gen_info(args.images, args.ccmd, start=args.start, finish=args.finish)
