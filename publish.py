@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+from os import path
+
+from photon.util.locations import change_location
+
+from common import _pinit, publish_args
+
 
 def publish(folder, branch):
     '''
@@ -6,10 +12,6 @@ def publish(folder, branch):
 
     .. seealso:: :func:`common.uni_args` for command line syntax
     '''
-    from os import path
-    from photon.util.locations import change_location
-    from common import _pinit
-
     photon = _pinit('publish')
     settings = photon.settings.get
 
@@ -40,7 +42,5 @@ def publish(folder, branch):
         )
 
 if __name__ == '__main__':
-    from common import publish_args
-
     args = publish_args()
     publish(args.folder, args.branch)

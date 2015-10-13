@@ -1,3 +1,5 @@
+from common import log_args, pinit
+
 
 def build_logger(msg):
     '''
@@ -9,13 +11,8 @@ def build_logger(msg):
 
     .. seealso:: :func:`common.log_args` for command line syntax
     '''
-
-    from common import pinit
-
     pinit('build_logger', verbose=False)[0].m(msg, verbose=True)
 
 if __name__ == '__main__':
-    from common import log_args
-
     args = log_args()
     build_logger(args.msg)

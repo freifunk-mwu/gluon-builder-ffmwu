@@ -1,5 +1,14 @@
+from os import path
 
-def gen_bconf(branch, targets, signkey, gt=None, st=None, broken=False, oneonly=False):
+from photon.util.files import write_json
+from photon.util.system import get_timestamp
+
+from common import ginit, pinit, prepare_args
+
+
+def gen_bconf(
+    branch, targets, signkey, gt=None, st=None, broken=False, oneonly=False
+):
     '''
     Provides all information needed by the builder in placing a ``bconf``-file.
 
@@ -9,11 +18,6 @@ def gen_bconf(branch, targets, signkey, gt=None, st=None, broken=False, oneonly=
 
     .. seealso:: :func:`common.prepare_args` for command line syntax
     '''
-    from os import path
-    from photon.util.system import get_timestamp
-    from photon.util.files import write_json
-    from common import pinit, ginit
-
     photon, settings = pinit('gen_bconf')
 
     if photon.settings.load('siteconf', path.join(settings['site']['local']['wi'], settings['site']['generator_settings'])):
@@ -56,7 +60,5 @@ def gen_bconf(branch, targets, signkey, gt=None, st=None, broken=False, oneonly=
         bconf.write(settings['prepare']['bconf']['out'], append=False)
 
 if __name__ == '__main__':
-    from common import prepare_args
-
     args = prepare_args()
     gen_bconf(args.branch, args.targets, args.signkey, gt=args.gt, st=args.st, broken=args.broken)

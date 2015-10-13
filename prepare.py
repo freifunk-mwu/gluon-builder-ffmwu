@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+from photon.util.locations import change_location
+
+from _gen_bconf import gen_bconf
+from common import ginit, pinit, prepare_args
+
+
 def prepare(branch, gt=None, st=None, nomodules=False, oneonly=False):
     '''
     Checks out Gluon sources and site-conf repositories at proper commit-ids or tags according to the branch to build.
@@ -8,10 +14,6 @@ def prepare(branch, gt=None, st=None, nomodules=False, oneonly=False):
 
     .. seealso:: :func:`common.prepare_args` for command line syntax
     '''
-
-    from common import pinit, ginit
-    from photon.util.locations import change_location
-
     photon, settings = pinit('prepare', clean=True)
 
     for community in [oneonly] if oneonly else settings['common']['communities'].keys():
@@ -55,9 +57,6 @@ def prepare(branch, gt=None, st=None, nomodules=False, oneonly=False):
         )
 
 if __name__ == '__main__':
-    from common import prepare_args
-    from _gen_bconf import gen_bconf
-
     args = prepare_args()
     prepare(args.branch, gt=args.gt, st=args.st, nomodules=args.nomodules, oneonly=args.oneonly)
     gen_bconf(args.branch, args.targets, args.signkey, gt=args.gt, st=args.st, broken=args.broken, oneonly=args.oneonly)

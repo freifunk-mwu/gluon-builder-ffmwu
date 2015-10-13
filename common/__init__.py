@@ -4,9 +4,14 @@
 .. |argparse| replace:: :py:class:`argparse.ArgumentParser` command line
 '''
 
-from os import path
-DEFAULTS = path.join(path.dirname(__file__), 'builder_defaults.yaml')
 from argparse import ArgumentParser
+from os import path
+
+from photon import Photon, Settings
+from photon.util.locations import change_location, search_location
+
+DEFAULTS = path.join(path.dirname(__file__), 'builder_defaults.yaml')
+
 
 def _pinit(mname, verbose=True):
     '''
@@ -15,7 +20,6 @@ def _pinit(mname, verbose=True):
     :param mname: |mname|
     :param verbose: |verbose|
     '''
-    from photon import Photon
     return Photon(
         DEFAULTS,
         config=None,
@@ -33,8 +37,6 @@ def pinit(mname, clean=False, verbose=True):
     :param verbose: |verbose|
     :returns: a new :py:class:`photon.Photon` instance with it's :py:class:`settings.Settings` as tuple
     '''
-    from photon.util.locations import change_location, search_location
-
     photon = _pinit(mname, verbose)
     settings = photon.settings.get
 
@@ -54,8 +56,6 @@ def sinit(verbose=False):
     :param verbose: |verbose|
     :returns: the settings compiled from :ref:`defaults` as dictionary
     '''
-    from photon import Settings
-
     return Settings(
         DEFAULTS,
         config=None,

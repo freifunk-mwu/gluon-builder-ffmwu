@@ -1,3 +1,9 @@
+from os import listdir, path
+
+from photon.util.files import read_json, write_json
+
+from common import info_args, pinit
+
 
 def gen_info(images, ccmd, start=None, finish=None):
     '''
@@ -10,11 +16,6 @@ def gen_info(images, ccmd, start=None, finish=None):
 
     .. seealso:: :func:`common.info_args` for command line syntax
     '''
-
-    from os import path, listdir
-    from photon.util.files import read_json, write_json
-    from common import pinit
-
     photon, settings = pinit('gen_info', verbose=True)
 
     info = read_json(path.join(settings['prepare']['stage_dir'], settings['prepare']['info']))
@@ -49,8 +50,7 @@ def gen_info(images, ccmd, start=None, finish=None):
 
     photon.m('info generated', more=dict(images=images, info=info))
 
-if __name__ == '__main__':
-    from common import info_args
 
+if __name__ == '__main__':
     args = info_args()
     gen_info(args.images, args.ccmd)

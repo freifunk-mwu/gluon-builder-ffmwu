@@ -1,3 +1,10 @@
+from os import path
+
+from photon.util.files import read_file
+from photon.util.locations import change_location
+
+from common import pinit, uni_args
+
 
 def uni_manifest(branch, manifest):
     '''
@@ -10,12 +17,6 @@ def uni_manifest(branch, manifest):
 
     .. seealso:: :func:`common.uni_args` for command line syntax
     '''
-
-    from os import path
-    from photon.util.files import read_file
-    from photon.util.locations import change_location
-    from common import pinit
-
     photon, settings = pinit('uni_manifest', verbose=True)
 
     manifest = path.abspath(manifest)
@@ -43,7 +44,5 @@ def uni_manifest(branch, manifest):
     else: photon.m('Refusing to write uni_manifest', more=dict(branch=branch, manifest=manifest), state=False)
 
 if __name__ == '__main__':
-    from common import uni_args
-
     args = uni_args()
     uni_manifest(args.branch, args.manifest)
