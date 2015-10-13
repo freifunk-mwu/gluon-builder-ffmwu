@@ -94,5 +94,6 @@ if __name__ == '__main__':
         args.signkey,
         gt=args.gt,
         st=args.st,
-        broken=args.broken
+        broken=args.broken,
+        onlyone=args.onlyone
     )
