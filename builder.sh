@@ -140,7 +140,7 @@ done
 $PYCMD "$PUBLISH" "$LIBRARYDIR" -b "$CALLBRANCH"
 
 # Clean up afterwards.
-rm -rf "$BUILDDIR" "$STAGEDIR"
+rm -rf "$STAGEDIR" "$BUILDDIR"
 
 echo "~ finished"
 exit 0
