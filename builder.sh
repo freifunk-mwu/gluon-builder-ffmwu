@@ -36,34 +36,39 @@ fi
 . "$BCONF"
 rm "$BCONF"
 
-for C in $COMMUNITIES; do
+for COMMUNITY in $COMMUNITIES; do
     BUILDSTART=$(date +%s)
-    WDIR="$BUILDDIR/$C"
-    SUMS="$STAGEDIR/${C}_$RELEASE.sha512"
-    LOGF="$STAGEDIR/${C}_$RELEASE.log"
-    # logger-shortcut: stdout to file
-    # (one per community)
-    LOG="tee -a $LOGF"
+    WORKINGDIR="$BUILDDIR/$COMMUNITY"
+
+    CHECKSUMS="$STAGEDIR/${COMMUNITY}_$RELEASE.sha512"
+    LOGFILE="$STAGEDIR/${COMMUNITY}_$RELEASE.log"
+
+    SHASCRIPT="$WORKINGDIR/scripts/sha512sum.sh"
+    SIGNSCRIPT="$WORKINGDIR/contrib/sign.sh"
+
+    SITEFILES=("$WORKINGDIR/site/site.conf" "$WORKINGDIR/site/site.mk" "$WORKINGDIR/site/modules" "$WORKINGDIR/site/i18n/*.po")
+    SITEZIP="$STAGEDIR/${COMMUNITY}_${RELEASE}_site.zip"
 
     # initialize logfile
-    echo "$BUILDSTART" > "$LOGF"
+    echo "start: $BUILDSTART" > "$LOGFILE"
+
+    # logger-shortcut: stdout to file
+    # (one per community)
+    LOG="tee -a $LOGFILE"
 
     # A shortcut for the meta file-logger
     function logp {
-        $PYCMD "$BUILDLOGGER" "${C}_$RELEASE ~ $@" 2>&1 | $LOG
+        $PYCMD "$BUILDLOGGER" "${COMMUNITY}_$RELEASE ~ $*" 2>&1 | $LOG
     }
 
-    logp "start"
-
     # To boldly go where no man has gone before
-    cd "$WDIR"
+    cd "$WORKINGDIR"
 
     logp "make update"
     $MKCMD update 2>&1 | $LOG
 
-    # patching openwrt for ati pata support
-    logp "patching openwrt"
-    echo "CONFIG_PATA_ATIIXP=y" >> "$WDIR/openwrt/target/linux/x86/generic/config-default"
+    logp "patching openwrt for ati pata support"
+    echo "CONFIG_PATA_ATIIXP=y" >> "$WORKINGDIR/openwrt/target/linux/x86/generic/config-default"
 
     # BUILDBRANCH is set in the defaults (['common']['branches']['build']),
     # it could be anything, but should occur in your available branches
@@ -75,9 +80,9 @@ for C in $COMMUNITIES; do
     # Set BUILDBRANCH to your 'stable' Branch. Any 'experimental' or 'beta'
     # user will auto update to the next 'stable' Release, unless the
     # autoupdater settings on the node are changed.
-    for TARGET in $TARGETS; do
-        logp "make images (GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE GLUON_TARGET=$TARGET BROKEN=$BROKEN)"
-        $MKCMD GLUON_BRANCH="$BUILDBRANCH" GLUON_RELEASE="$RELEASE" GLUON_TARGET="$TARGET" BROKEN="$BROKEN" 2>&1 | $LOG
+    for BUILDTARGET in $TARGETS; do
+        logp "make images (GLUON_TARGET=$BUILDTARGET GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE BROKEN=$BROKEN)"
+        $MKCMD GLUON_BRANCH="$BUILDBRANCH" GLUON_RELEASE="$RELEASE" GLUON_TARGET="$BUILDTARGET" BROKEN="$BROKEN" 2>&1 | $LOG
     done
 
     # Create a (temporary) manifest
@@ -87,42 +92,44 @@ for C in $COMMUNITIES; do
     # Take the temporary manifest and replace it's BUILDBRANCH by all
     # available branches. Rewrites the manifest and creates symlinks for
     # each branch onto it: ./$branch.manifest -> ./manifest
-    $PYCMD "$UNIMANIFEST" -b "$CALLBRANCH" -m "$WDIR/images/sysupgrade/$CALLBRANCH.manifest"
-
-    SHASCRIPT="$WDIR/scripts/sha512sum.sh"
-    SIGNSCRIPT="$WDIR/contrib/sign.sh"
+    logp "unify manifest ($CALLBRANCH)"
+    $PYCMD "$UNIMANIFEST" -b "$CALLBRANCH" -m "$WORKINGDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
 
     # Now the manifest is fixed, let's sign! Remember to increase the
     # 'good_signatures' by one in your siteconf if signing automatically.
     if [ -f "$SIGNKEY" ]; then
         logp "signing ($SIGNKEY images/sysupgrade/$CALLBRANCH.manifest)"
-        $SIGNSCRIPT "$SIGNKEY" "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
+        $SIGNSCRIPT "$SIGNKEY" "$WORKINGDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
     else
         logp "skipping sign, no key found ($SIGNKEY)"
     fi
 
-    # Now for the fun part
-    logp "appendix"
-
     # The info file is a json containing a mapping of router models matching
     # image-file names. So let's store the checksums alongside.
-    $PYCMD "$GENINFO" -i "$WDIR/images" -c "$SHASCRIPT" --start "$BUILDSTART" --finish "$(date +%s)"
-    for g in images/*/*; do echo "$($SHASCRIPT "$g") $g" >> "$SUMS"; done
+    logp "generating info.json"
+    $PYCMD "$GENINFO" -i "$WORKINGDIR/images" -c "$SHASCRIPT" --start "$BUILDSTART" --finish "$(date +%s)" 2>&1 | $LOG
+
+    # Provide own checksum files of both factory and sysupgrade images
+    logp "getting checksums ($CHECKSUMS)"
+    for g in images/*/*; do echo "$($SHASCRIPT "$g") $g" >> "$CHECKSUMS"; done
+    # Sign them
     if [ -f "$SIGNKEY" ]; then
-        $SIGNSCRIPT "$SIGNKEY" "$SUMS" 2>&1 | $LOG
+        logp "signing ($SIGNKEY $CHECKSUMS)"
+        $SIGNSCRIPT "$SIGNKEY" "$CHECKSUMS" 2>&1 | $LOG
     fi
 
     # Move freshly built images into the library and copy metadata from stagedir
-    mkdir -p "$LIBRARYDIR/${C}" 2>&1 | $LOG
-    cp -rv "$WDIR/images/." "$LIBRARYDIR/${C}/" 2>&1 | $LOG
+    logp "move images into library ($LIBRARYDIR/$COMMUNITY)"
+    mkdir -p "$LIBRARYDIR/$COMMUNITY" 2>&1 | $LOG
+    cp -rv "$WORKINGDIR/images/." "$LIBRARYDIR/$COMMUNITY/" 2>&1 | $LOG
 
     # Because we are building multiple communities the configuration differs.
     # For us, it is machine created, so store the results as well.
-    SITEFILES=("$WDIR/site/site.conf" "$WDIR/site/site.mk" "$WDIR/site/modules" "$WDIR/site/i18n/*.po")
-    zip -j "$STAGEDIR/${C}_${RELEASE}_site.zip" "${SITEFILES[*]}" | $LOG
+    logp "store siteconf"
+    zip -j "$SITEZIP" "${SITEFILES[*]}" 2>&1 | $LOG
 
-    # Compress stdio log
-    gzip "$LOGF"
+    logp "compress logfile, bye"
+    gzip "$LOGFILE"
 
     # Last, copy the stagedir.
     cp -rv "$STAGEDIR/." "$LIBRARYDIR"
