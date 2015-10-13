@@ -42,12 +42,10 @@ for COMMUNITY in $COMMUNITIES; do
 
     CHECKSUMS="$STAGEDIR/${COMMUNITY}_$RELEASE.sha512"
     LOGFILE="$STAGEDIR/${COMMUNITY}_$RELEASE.log"
+    SITEZIP="$STAGEDIR/${COMMUNITY}_${RELEASE}_site.zip"
 
     SHASCRIPT="$WORKINGDIR/scripts/sha512sum.sh"
     SIGNSCRIPT="$WORKINGDIR/contrib/sign.sh"
-
-    SITEFILES=("$WORKINGDIR/site/site.conf" "$WORKINGDIR/site/site.mk" "$WORKINGDIR/site/modules" "$WORKINGDIR/site/i18n/*.po")
-    SITEZIP="$STAGEDIR/${COMMUNITY}_${RELEASE}_site.zip"
 
     # initialize logfile
     echo "start: $BUILDSTART" > "$LOGFILE"
@@ -126,7 +124,7 @@ for COMMUNITY in $COMMUNITIES; do
     # Because we are building multiple communities the configuration differs.
     # For us, it is machine created, so store the results as well.
     logp "store siteconf"
-    zip -j "$SITEZIP" "${SITEFILES[*]}" 2>&1 | $LOG
+    zip -j "$SITEZIP" "$WORKINGDIR/site/site.conf" "$WORKINGDIR/site/site.mk" "$WORKINGDIR/site/modules" "$WORKINGDIR/site/i18n/"*.po 2>&1 | $LOG
 
     logp "compress logfile, bye"
     gzip "$LOGFILE"
