@@ -41,22 +41,28 @@ for C in $COMMUNITIES; do
     WDIR="$BUILDDIR/$C"
     SUMS="$STAGEDIR/${C}_$RELEASE.sha512"
     LOGF="$STAGEDIR/${C}_$RELEASE.log"
-    # A shortcut for the meta file-logger
-    LOGP="$PYCMD $BUILDLOGGER ~ ${C}_$RELEASE ~"
-
-    $LOGP "start" > "$LOGF"
-    # Another logger-shortcut, this time: stdout to file
+    # logger-shortcut: stdout to file
     # (one per community)
     LOG="tee -a $LOGF"
+
+    # initialize logfile
+    echo "$BUILDSTART" > "$LOGF"
+
+    # A shortcut for the meta file-logger
+    function logp {
+        $PYCMD "$BUILDLOGGER" "${C}_$RELEASE ~ $@" 2>&1 | $LOG
+    }
+
+    logp "start"
 
     # To boldly go where no man has gone before
     cd "$WDIR"
 
-    $LOGP "make update" 2>&1 | $LOG
+    logp "make update"
     $MKCMD update 2>&1 | $LOG
 
     # patching openwrt for ati pata support
-    $LOGP "patching openwrt" 2>&1 | $LOG
+    logp "patching openwrt"
     echo "CONFIG_PATA_ATIIXP=y" >> "$WDIR/openwrt/target/linux/x86/generic/config-default"
 
     # BUILDBRANCH is set in the defaults (['common']['branches']['build']),
@@ -70,12 +76,12 @@ for C in $COMMUNITIES; do
     # user will auto update to the next 'stable' Release, unless the
     # autoupdater settings on the node are changed.
     for TARGET in $TARGETS; do
-        $LOGP "make images (GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE GLUON_TARGET=$TARGET BROKEN=$BROKEN)" 2>&1 | $LOG
+        logp "make images (GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE GLUON_TARGET=$TARGET BROKEN=$BROKEN)"
         $MKCMD GLUON_BRANCH="$BUILDBRANCH" GLUON_RELEASE="$RELEASE" GLUON_TARGET="$TARGET" BROKEN="$BROKEN" 2>&1 | $LOG
     done
 
     # Create a (temporary) manifest
-    $LOGP "make manifest (GLUON_BRANCH=$CALLBRANCH GLUON_PRIORITY=$PRIORITY)" 2>&1 | $LOG
+    logp "make manifest (GLUON_BRANCH=$CALLBRANCH GLUON_PRIORITY=$PRIORITY)"
     $MKCMD manifest GLUON_BRANCH="$CALLBRANCH" GLUON_PRIORITY="$PRIORITY" 2>&1 | $LOG
 
     # Take the temporary manifest and replace it's BUILDBRANCH by all
@@ -89,14 +95,14 @@ for C in $COMMUNITIES; do
     # Now the manifest is fixed, let's sign! Remember to increase the
     # 'good_signatures' by one in your siteconf if signing automatically.
     if [ -f "$SIGNKEY" ]; then
-        $LOGP "signing ($SIGNKEY images/sysupgrade/$CALLBRANCH.manifest)" 2>&1 | $LOG
+        logp "signing ($SIGNKEY images/sysupgrade/$CALLBRANCH.manifest)"
         $SIGNSCRIPT "$SIGNKEY" "$WDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
     else
-        $LOGP "skipping sign, no key found ($SIGNKEY)" | $LOG
+        logp "skipping sign, no key found ($SIGNKEY)"
     fi
 
     # Now for the fun part
-    $LOGP "appendix" 2>&1 | $LOG
+    logp "appendix"
 
     # The info file is a json containing a mapping of router models matching
     # image-file names. So let's store the checksums alongside.
