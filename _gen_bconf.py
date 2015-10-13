@@ -12,7 +12,8 @@ def gen_bconf(
     '''
     Provides all information needed by the builder in placing a ``bconf``-file.
 
-    Since we are already collecting information here, the ``info.json`` is created as well.
+    Since we are already collecting information here, the ``info.json``
+    is created as well.
 
     The same arguments as in :func:`prepare` are used here.
 

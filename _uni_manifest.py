@@ -13,7 +13,8 @@ def uni_manifest(branch, manifest):
     :param branch: The branch currently building
     :param manifest: The path to the manifest file
 
-    Before the manifest gets signed, this function is called to enable cross releasing of branches by clever symlinking.
+    Before the manifest gets signed, this function is called to enable
+    cross releasing of branches by clever symlinking.
 
     .. seealso:: :func:`common.uni_args` for command line syntax
     '''

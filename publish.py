@@ -8,7 +8,10 @@ from common import _pinit, publish_args
 
 def publish(folder, branch):
     '''
-    Publishes freshly built images. This is accomplished by setting symbolic-links in the form of ``communitiy``/``branch`` pointing into the library (in the form of _library/``build``-``branch``/``short-community``)
+    Publishes freshly built images.
+    This is accomplished by setting symbolic-links in the form
+    of ``communitiy``/``branch`` pointing into the library (in the
+    form of _library/``build``-``branch``/``short-community``)
 
     .. seealso:: :func:`common.uni_args` for command line syntax
     '''

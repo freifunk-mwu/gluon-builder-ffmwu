@@ -15,7 +15,8 @@ DEFAULTS = path.join(path.dirname(__file__), 'builder_defaults.yaml')
 
 def _pinit(mname, verbose=True):
     '''
-    We need the raw Photon instance without staging in :func:`publish`. Otherwise this is a helper for :func:`pinit`.
+    We need the raw Photon instance without staging in :func:`publish`.
+    Otherwise this is a helper for :func:`pinit`.
 
     :param mname: |mname|
     :param verbose: |verbose|
@@ -30,13 +31,17 @@ def _pinit(mname, verbose=True):
 
 def pinit(mname, clean=False, verbose=True):
     '''
-    Creates a new Photon instance and stages into common stage dir defined in :ref:`defaults`.
-    It is some subfolder of the httpd-dir, so you can see what's going on while building
+    Creates a new Photon instance and stages into common stage directory
+    defined in :ref:`defaults`.
+    It is some subfolder of the httpd-dir, so you can see what's going on
+    while building.
 
     :param mname: |mname|
-    :param clean: Starts a new meta file replacing the old one. Used in :func:`prepare`
+    :param clean: Starts a new meta file replacing the old one.
+        Used in :func:`prepare`
     :param verbose: |verbose|
-    :returns: a new :py:class:`photon.Photon` instance with it's :py:class:`settings.Settings` as tuple
+    :returns: a new :py:class:`photon.Photon` instance with it's
+        :py:class:`settings.Settings` as tuple
     '''
     photon = _pinit(mname, verbose)
     settings = photon.settings.get
@@ -70,7 +75,8 @@ def sinit(verbose=False):
 
 def ginit(photon, community='wi'):
     '''
-    Common git handler for Gluon and Site used by :func:`prepare` and :func:`_gen_bconf`
+    Common git handler for Gluon and Site used by
+    :func:`prepare` and :func:`_gen_bconf`
 
     :param p: A photon instance
     :param c: Short flag of community to use
@@ -96,10 +102,13 @@ def prepare_args():
     :param --target -t: Specify a list of GLUON_TARGETs to build
     :param --gt -g: A git commit-id or tag for gluon
     :param --st -s: A git commit-id or tag for site
-    :param --broken: Build experimental images even for unsupported (broken) hardware
+    :param --broken: Build experimental images even for
+        unsupported (broken) hardware
     :param --signkey: Specify location to a key to sign the images
-    :param --nomodules: Prevent building modules (will be passed to siteconf generator)
-    :param --oneonly: Just build images for specified community (only used for testing purposes)
+    :param --nomodules: Prevent building modules
+        (will be passed to siteconf generator)
+    :param --oneonly: Just build images for specified community
+        (only used for testing purposes)
     '''
     settings = sinit()
     args = ArgumentParser(
@@ -209,8 +218,10 @@ def info_args():
 
     :param --images -i: Path to the images folder
     :param --ccmd -c: Checksumming command. calls ``$ccmd $image``
-    :param --start: Calculates build duration if passed together with ``--finish``
-    :param --finish: Calculates build duration if passed together with ``--start``
+    :param --start: Calculates build duration if passed together
+        with ``--finish``
+    :param --finish: Calculates build duration if passed together
+        with ``--start``
     '''
     args = ArgumentParser(
         prog='gluon_builder_gen_info',

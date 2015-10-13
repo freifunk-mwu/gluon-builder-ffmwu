@@ -8,7 +8,8 @@ from common import ginit, pinit, prepare_args
 
 def prepare(branch, gt=None, st=None, nomodules=False, oneonly=False):
     '''
-    Checks out Gluon sources and site-conf repositories at proper commit-ids or tags according to the branch to build.
+    Checks out Gluon sources and site-conf repositories at proper commit-ids
+    or tags according to the branch to build.
     Generates a site-conf afterwards.
     Automatically invokes :func:`_gen_bconf` afterwards
 
