@@ -9,7 +9,7 @@ from common import ginit, pinit, prepare_args
 def prepare(
     branch,
     gluon_tag=None, site_tag=None,
-    nomodules=False, onlyone=False
+    nomodules=False, onlyone=False, priority=None
 ):
     '''
     Checks out Gluon sources and site-conf repositories at proper commit-ids
@@ -75,7 +75,8 @@ def prepare(
                 cmd='%s generate.py %s %s' % (
                     settings['common']['pycmd'],
                     community,
-                    '--nomodules' if nomodules else ''
+                    '--nomodules' if nomodules else '',
+                    '--priority %s' % (priority) if priority else ''
                 ),
                 cwd=settings['site']['local'][community]
             ),
@@ -89,7 +90,8 @@ if __name__ == '__main__':
         gluon_tag=args.gluon_tag,
         site_tag=args.site_tag,
         nomodules=args.nomodules,
-        onlyone=args.onlyone
+        onlyone=args.onlyone,
+        priority=args.priority
     )
     gen_bconf(
         args.branch,
@@ -98,5 +100,6 @@ if __name__ == '__main__':
         gluon_tag=args.gluon_tag,
         site_tag=args.site_tag,
         broken=args.broken,
-        onlyone=args.onlyone
+        onlyone=args.onlyone,
+        priority=args.priority
     )

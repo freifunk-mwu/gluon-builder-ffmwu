@@ -146,6 +146,11 @@ def prepare_args():
         help='Build also models which are flagged as broken'
     )
     args.add_argument(
+        '--priority',
+        action='store',
+        help='Overwrite gluon priority in siteconf generator'
+    )
+    args.add_argument(
         '--signkey',
         action='store',
         default=settings['publish']['autosign_key']

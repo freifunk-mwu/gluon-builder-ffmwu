@@ -9,7 +9,7 @@ from common import ginit, pinit, prepare_args
 def gen_bconf(
     branch, targets, signkey,
     gluon_tag=None, site_tag=None,
-    broken=False, onlyone=False
+    broken=False, onlyone=False, priority=None
 ):
     '''
     Provides all information needed by the builder in placing a ``bconf``-file.
@@ -32,13 +32,16 @@ def gen_bconf(
     ):
         photon.s2m
 
-        priority = settings['siteconf']['site']['gluon_priority']
-        version = settings['siteconf']['site']['gluon_release_num']
         gluon, site = ginit(photon)
         gluon_tag = gluon_tag if gluon_tag else gluon.short_commit[0]
         site_tag = site_tag if site_tag else site.short_commit[0]
 
         broken = '1' if broken else ''
+        version = settings['siteconf']['site']['gluon_release_num']
+        priority = (
+            priority if priority
+            else settings['siteconf']['site']['gluon_priority']
+        )
         desc = '-%s%s' % (
             branch, '-%s' % (get_timestamp(time=False)) if
             not all(settings['common']['branches']['avail'][branch])
@@ -100,5 +103,6 @@ if __name__ == '__main__':
         gluon_tag=args.gluon_tag,
         site_tag=args.site_tag,
         broken=args.broken,
-        onlyone=args.onlyone
+        onlyone=args.onlyone,
+        priority=args.priority
     )
