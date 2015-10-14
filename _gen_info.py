@@ -30,7 +30,24 @@ def gen_info(images, ccmd, start=None, finish=None):
     images = path.abspath(images)
 
     if start and finish:
-        info['_info']['build_duration'] = abs(int(finish) - int(start))
+        try:
+            seconds = abs(int(finish) - int(start))
+        except (TypeError, ValueError):
+            seconds = None
+        if seconds:
+            info['_info']['build_seconds'] = seconds
+            res = []
+            for name, val in [
+                ('d', 60*60*24),
+                ('h', 60*60),
+                ('m', 60),
+                ('s', 1)
+            ]:
+                if seconds > val:
+                    pval, seconds = divmod(seconds, val)
+                    pval = int(pval)
+                    res.append('%s%s' % (pval, name))
+            info['_info']['build_time'] = ' '.join(res)
 
     for sp in ['factory', 'sysupgrade']:
         im = path.join(images, sp)
