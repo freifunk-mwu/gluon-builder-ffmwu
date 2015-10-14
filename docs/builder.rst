@@ -22,6 +22,8 @@ stable       latest tag       latest tag
 ============ ================ ==============
 
 * Use ``--broken`` to build images for unsupported (broken) hardware.
+* Use ``--onlyone`` or ``-oo`` to build images for only one community.
+* Use ``--nomodules`` to skip module creation in site.conf generator
 * Use ``--target`` or ``-t`` to specify a list of platforms to build images for, e.g. ``-t ar71xx-generic x86-generic`` for two platforms (this overwrites the default setting, of building all available).
 
 * See ``./builder.sh --help`` for more, or see :func:`common.prepare_args` for more.
