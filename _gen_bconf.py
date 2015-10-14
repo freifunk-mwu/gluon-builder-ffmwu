@@ -7,7 +7,9 @@ from common import ginit, pinit, prepare_args
 
 
 def gen_bconf(
-    branch, targets, signkey, gt=None, st=None, broken=False, onlyone=False
+    branch, targets, signkey,
+    gluon_tag=None, site_tag=None,
+    broken=False, onlyone=False
 ):
     '''
     Provides all information needed by the builder in placing a ``bconf``-file.
@@ -33,10 +35,10 @@ def gen_bconf(
         priority = settings['siteconf']['site']['gluon_priority']
         version = settings['siteconf']['site']['gluon_release_num']
         gluon, site = ginit(photon)
-        gt = gt if gt else gluon.short_commit[0]
-        st = st if st else site.short_commit[0]
-        broken = '1' if broken else ''
+        gluon_tag = gluon_tag if gluon_tag else gluon.short_commit[0]
+        site_tag = site_tag if site_tag else site.short_commit[0]
 
+        broken = '1' if broken else ''
         desc = '-%s%s' % (
             branch, '-%s' % (get_timestamp(time=False)) if
             not all(settings['common']['branches']['avail'][branch])
@@ -50,8 +52,8 @@ def gen_bconf(
             communities=onlyone if onlyone else ' '.join(
                 settings['common']['communities'].keys()
             ),
-            gluon_t=gt,
-            site_t=st,
+            gluon_tag=gluon_tag,
+            site_tag=site_tag,
             priority=priority,
             release='%s%s' % (version, desc),
             targets=' '.join(targets),
@@ -95,8 +97,8 @@ if __name__ == '__main__':
         args.branch,
         args.targets,
         args.signkey,
-        gt=args.gt,
-        st=args.st,
+        gluon_tag=args.gluon_tag,
+        site_tag=args.site_tag,
         broken=args.broken,
         onlyone=args.onlyone
     )

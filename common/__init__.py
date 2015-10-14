@@ -131,12 +131,12 @@ def prepare_args():
         help='The GLUON_TARGETs to build'
     )
     args.add_argument(
-        '--gt', '-g',
+        '--gluon_tag', '-gt',
         action='store',
         help='A git commit-id or tag for gluon'
     )
     args.add_argument(
-        '--st', '-s',
+        '--site_tag', '-st',
         action='store',
         help='A git commit-id or tag for site'
     )

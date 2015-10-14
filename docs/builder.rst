@@ -11,7 +11,7 @@ commandline
 
 The primary goal of the builder is to run unattended in the crontab. So a simple ``./builder.sh`` without any arguments builds a new experimental from the most recent sources.
 
-* Use  the ``-b`` Flag to specify a branch to build. The builder will checkout the following if no ``-gt`` (gluon tag or commit id) or ``-st`` (site tag or commit id) is given:
+* Use  the ``-b`` Flag to specify a branch to build. The builder will checkout the following if no ``-gt`` / ``--gluon_tag`` (gluon tag or commit id) or ``-st`` / ``--site_tag`` (site tag or commit id) is given:
 
 ============ ================ ==============
 branch       gluon            site

@@ -6,7 +6,11 @@ from _gen_bconf import gen_bconf
 from common import ginit, pinit, prepare_args
 
 
-def prepare(branch, gt=None, st=None, nomodules=False, onlyone=False):
+def prepare(
+    branch,
+    gluon_tag=None, site_tag=None,
+    nomodules=False, onlyone=False
+):
     '''
     Checks out Gluon sources and site-conf repositories at proper commit-ids
     or tags according to the branch to build.
@@ -29,13 +33,13 @@ def prepare(branch, gt=None, st=None, nomodules=False, onlyone=False):
         tags = settings['common']['branches']['avail'][branch]
         gluon, site = ginit(photon, community=community)
 
-        if gt:
-            if gluon.tag and gt in gluon.tag:
-                gluon.tag = gt
+        if gluon_tag:
+            if gluon.tag and gluon_tag in gluon.tag:
+                gluon.tag = gluon_tag
             elif gluon.commit and (
-                gt in gluon.commit or gt in gluon.short_commit
+                gluon_tag in gluon.commit or gluon_tag in gluon.short_commit
             ):
-                gluon.commit = gt
+                gluon.commit = gluon_tag
             else:
                 photon.m(
                     'Invalid git commit-id or tag specified for gluon',
@@ -47,13 +51,13 @@ def prepare(branch, gt=None, st=None, nomodules=False, onlyone=False):
             else:
                 gluon.branch = None
 
-        if st:
-            if site.tag and st in site.tag:
-                site.tag = st
+        if site_tag:
+            if site.tag and site_tag in site.tag:
+                site.tag = site_tag
             elif site.commit and (
-                st in site.commit or st in site.short_commit
+                site_tag in site.commit or site_tag in site.short_commit
             ):
-                site.commit = st
+                site.commit = site_tag
             else:
                 photon.m(
                     'Invalid git commit-id or tag specified for site',
@@ -82,8 +86,8 @@ if __name__ == '__main__':
     args = prepare_args()
     prepare(
         args.branch,
-        gt=args.gt,
-        st=args.st,
+        gluon_tag=args.gluon_tag,
+        site_tag=args.site_tag,
         nomodules=args.nomodules,
         onlyone=args.onlyone
     )
@@ -91,8 +95,8 @@ if __name__ == '__main__':
         args.branch,
         args.targets,
         args.signkey,
-        gt=args.gt,
-        st=args.st,
+        gluon_tag=args.gluon_tag,
+        site_tag=args.site_tag,
         broken=args.broken,
         onlyone=args.onlyone
     )
