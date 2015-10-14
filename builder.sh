@@ -65,6 +65,7 @@ for COMMUNITY in $COMMUNITIES; do
     $MKCMD update 2>&1 | $LOG
 
     logp "patching openwrt for ati pata support"
+    echo "CONFIG_PATA_ATIIXP=y" >> "$WORKINGDIR/openwrt/target/linux/x86/64/config-default"
     echo "CONFIG_PATA_ATIIXP=y" >> "$WORKINGDIR/openwrt/target/linux/x86/generic/config-default"
 
     # BUILDBRANCH is set in the defaults (['common']['branches']['build']),

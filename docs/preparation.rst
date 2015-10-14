@@ -33,6 +33,7 @@ Then it creates the siteconf for each community resulting in the files::
     ~/gluon_builder/${community}/site/site.conf
     ~/gluon_builder/${community}/site/site.mk
     ~/gluon_builder/${community}/site/modules (if the site-generator is not called with --nomodules)
+    ~/gluon_builder/${community}/site/i18n/*.po (language translations)
 
 .. seealso:: our generator in the `site-ffmwu repository <http://github.com/freifunk-mwu/site-ffmwu>`_
 
@@ -68,6 +69,7 @@ For example from our first stable (pre-)release:
             "priority": "0.2",
             "release": "0.0.1-stable",
             "site_t": "8534e28",
+            "targets": "ar71xx-generic",
             "version": "0.0.1"
         }
     }

@@ -39,10 +39,11 @@ def gen_bconf(
 
         desc = '-%s%s' % (
             branch, '-%s' % (get_timestamp(time=False)) if
-            not all(settings['common']['branches']['avail'][branch]) else
-            ''
+            not all(settings['common']['branches']['avail'][branch])
+            else ''
         )
 
+        # these fields appear in the info.json
         fields = dict(
             broken_flag=broken,
             call_branch=branch,
@@ -58,11 +59,13 @@ def gen_bconf(
         )
         write_json(
             path.join(
-                settings['prepare']['stage_dir'], settings['prepare']['info']
+                settings['prepare']['stage_dir'],
+                settings['prepare']['info']
             ),
             dict(_info=fields)
         )
 
+        # these fields only appear in the bconf
         fields.update(dict(
             build_branch=settings['common']['branches']['build'],
             build_dir=settings['gluon']['local']['dir'],
