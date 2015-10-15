@@ -21,37 +21,35 @@ def uni_manifest(branch, manifest):
     photon, settings = pinit('uni_manifest', verbose=True)
 
     manifest = path.abspath(manifest)
-    mf = read_file(manifest)
-    if mf and mf.count('BRANCH=') == 1:
+    manifest_content = read_file(manifest)
+    if manifest_content and manifest_content.count('BRANCH=') == 1:
 
         uni_branch = '\n'.join(
             'BRANCH=%s' % (branch) for branch in sorted(
                 settings['common']['branches']['avail'].keys()
             )
         )
-        m = photon.template_handler(
-            mf.replace('BRANCH=%s' % (branch), '${uni_branch}'),
+        new_manifest = photon.template_handler(
+            manifest_content.replace('BRANCH=%s' % (branch), '${uni_branch}'),
             fields=dict(uni_branch=uni_branch)
         )
         change_location(manifest, False, move=True)
-        m.write(
-            manifest.replace(
-                '%s.manifest' % (branch), 'manifest'
-            ),
+        new_manifest.write(
+            manifest.replace('%s.manifest' % (branch), 'manifest'),
             append=False
         )
 
-        for b in settings['common']['branches']['avail'].keys():
-            ml = manifest.replace(
-                '%s.manifest' % (branch), '%s.manifest' % (b)
+        for branch in settings['common']['branches']['avail'].keys():
+            manifest_link = manifest.replace(
+                '%s.manifest' % (branch), '%s.manifest' % (branch)
             )
 
-            change_location(ml, False, move=True)
+            change_location(manifest_link, False, move=True)
             photon.m(
-                'linking manifests %s' % (ml),
+                'linking manifests %s' % (manifest_link),
                 cmdd=dict(
-                    cmd='ln -s manifest %s' % (path.basename(ml)),
-                    cwd=path.dirname(ml)
+                    cmd='ln -s manifest %s' % (path.basename(manifest_link)),
+                    cwd=path.dirname(manifest_link)
                 )
             )
 
