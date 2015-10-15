@@ -72,7 +72,7 @@ def prepare(
         photon.m(
             'generating site for %s' % (community),
             cmdd=dict(
-                cmd='%s generate.py %s %s' % (
+                cmd='%s generate.py %s %s %s' % (
                     settings['common']['pycmd'],
                     community,
                     '--nomodules' if nomodules else '',
