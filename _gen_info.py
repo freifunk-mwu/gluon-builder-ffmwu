@@ -1,8 +1,7 @@
 from os import listdir, path
 
-from photon.util.files import read_json, write_json
-
 from common import info_args, pinit
+from photon.util.files import read_json, write_json
 
 
 def gen_info(images, ccmd, start=None, finish=None):

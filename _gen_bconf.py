@@ -1,9 +1,8 @@
 from os import path
 
+from common import ginit, pinit, prepare_args
 from photon.util.files import write_json
 from photon.util.system import get_timestamp
-
-from common import ginit, pinit, prepare_args
 
 
 def gen_bconf(

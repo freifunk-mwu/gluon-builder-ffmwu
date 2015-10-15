@@ -1,9 +1,8 @@
 from os import path
 
+from common import pinit, uni_args
 from photon.util.files import read_file
 from photon.util.locations import change_location
-
-from common import pinit, uni_args
 
 
 def uni_manifest(branch, manifest):

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 from os import path
 
-from photon.util.locations import change_location
-
 from common import _pinit, publish_args
+from photon.util.locations import change_location
 
 
 def publish(folder, branch):

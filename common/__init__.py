@@ -3,7 +3,6 @@
 .. |verbose| replace:: Set verbose flag of Photon instance
 .. |argparse| replace:: :py:class:`argparse.ArgumentParser` command line
 '''
-
 from argparse import ArgumentParser
 from os import path
 

@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 
-from photon.util.locations import change_location
-
 from _gen_bconf import gen_bconf
 from common import ginit, pinit, prepare_args
+from photon.util.locations import change_location
 
 
 def prepare(
