@@ -51,7 +51,9 @@ def gen_info(images, ccmd, start=None, finish=None):
     for sp in ['factory', 'sysupgrade']:
         im = path.join(images, sp)
         if info and path.exists(im):
-            for imgname in listdir(im):
+            for imgname in [
+                i for i in listdir(im) if not i.endswith('manifest')
+            ]:
                 model = imgname.split(
                     '%s-' % (info['_info']['release'])
                 )[-1].split(
