@@ -36,7 +36,7 @@ def gen_info(images, ccmd, start=None, finish=None):
             seconds = None
         if seconds:
             info['_info']['build_seconds'] = seconds
-            res = []
+            build_time = []
             for name, val in [
                 ('d', 60*60*24),
                 ('h', 60*60),
@@ -45,19 +45,19 @@ def gen_info(images, ccmd, start=None, finish=None):
             ]:
                 if seconds > val:
                     pval, seconds = divmod(seconds, val)
-                    res.append('%d%s' % (pval, name))
-            info['_info']['build_time'] = ' '.join(res)
+                    build_time.append('%d%s' % (pval, name))
+            info['_info']['build_time'] = ' '.join(build_time)
 
-    for sp in ['factory', 'sysupgrade']:
-        im = path.join(images, sp)
-        if info and path.exists(im):
-            for imgname in [
-                i for i in listdir(im) if not i.endswith('manifest')
+    for variety in ['factory', 'sysupgrade']:
+        image_dir = path.join(images, variety)
+        if info and path.exists(image_dir):
+            for image_name in [
+                i for i in listdir(image_dir) if not i.endswith('manifest')
             ]:
-                model = imgname.split(
+                model = image_name.split(
                     '%s-' % (info['_info']['release'])
                 )[-1].split(
-                    '-%s.bin' % (sp)
+                    '-%s.bin' % (variety)
                 )[0].split(
                     '.bin'
                 )[0]
@@ -67,13 +67,16 @@ def gen_info(images, ccmd, start=None, finish=None):
                     cmdd=dict(
                         cmd='%s %s' % (
                             path.abspath(ccmd),
-                            path.join(im, imgname)
+                            path.join(image_dir, image_name)
                         )
                     )
                 ).get('out')
 
                 info[model] = info.get(model, dict())
-                info[model][sp] = dict(image=imgname, checksum=checksum)
+                info[model][variety] = dict(
+                    image=image_name,
+                    checksum=checksum
+                )
 
             write_json(path.join(images, settings['prepare']['info']), info)
 
