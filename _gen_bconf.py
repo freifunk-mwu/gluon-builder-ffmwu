@@ -42,7 +42,7 @@ def gen_bconf(
             priority if priority
             else settings['siteconf']['site']['gluon_priority']
         )
-        desc = '-%s%s' % (
+        description = '-%s%s' % (
             branch, '-%s' % (get_timestamp(time=False)) if
             not all(settings['common']['branches']['avail'][branch])
             else ''
@@ -58,7 +58,7 @@ def gen_bconf(
             gluon_tag=gluon_tag,
             site_tag=site_tag,
             priority=priority,
-            release='%s%s' % (version, desc),
+            release='%s%s' % (version, description),
             targets=' '.join(targets),
             version=version
         )
@@ -77,7 +77,7 @@ def gen_bconf(
             info_file=settings['prepare']['info'],
             library_dir=path.join(
                 settings['publish']['library_dir'],
-                '%s%s' % (version, desc)
+                '%s%s' % (version, description)
             ),
             mkcmd=settings['common']['mkcmd'],
             pycmd=settings['common']['pycmd'],

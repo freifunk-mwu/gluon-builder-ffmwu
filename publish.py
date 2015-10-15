@@ -29,23 +29,23 @@ def publish(folder, branch):
             state=True
         )
 
-    for community_s, community_l in settings['common']['communities'].items():
-        fulltgt = path.join(
+    for short_name, long_name in settings['common']['communities'].items():
+        full_target = path.join(
             settings['publish']['http_fw_dir'],
-            community_l,
+            long_name,
             branch
         )
-        change_location(fulltgt, False, move=True)
-        tgt = path.dirname(fulltgt)
-        lnk = path.relpath(path.join(folder, community_s), tgt)
+        change_location(full_target, False, move=True)
+        target = path.dirname(full_target)
+        link = path.relpath(path.join(folder, short_name), target)
 
         photon.m(
             'linking release',
             cmdd=dict(
-                cmd='ln -s %s %s' % (lnk, branch),
-                cwd=tgt
+                cmd='ln -s %s %s' % (link, branch),
+                cwd=target
             ),
-            more=dict(fulltgt=fulltgt)
+            more=dict(full_target=full_target)
         )
 
 if __name__ == '__main__':
