@@ -64,9 +64,15 @@ for COMMUNITY in $COMMUNITIES; do
     logp "make update"
     $MKCMD update 2>&1 | $LOG
 
-    logp "patching openwrt for ati pata support"
-    echo "CONFIG_PATA_ATIIXP=y" >> "$WORKINGDIR/openwrt/target/linux/x86/64/config-default"
-    echo "CONFIG_PATA_ATIIXP=y" >> "$WORKINGDIR/openwrt/target/linux/x86/generic/config-default"
+    for GLUONTARGET in $TARGETS; do
+        if [ $GLUONTARGET == "x86-generic" ]; then
+            logp "patching target x86-generic for ati pata support"
+            echo "CONFIG_PATA_ATIIXP=y" >> "$WORKINGDIR/openwrt/target/linux/x86/generic/config-*"
+        elif [ $GLUONTARGET == "x86-64" ]; then
+            logp "patching target x86-64 for ati pata support"
+            echo "CONFIG_PATA_ATIIXP=y" >> "$WORKINGDIR/openwrt/target/linux/x86/64/config-*"
+        fi
+    done
 
     # BUILDBRANCH is set in the defaults (['common']['branches']['build']),
     # it could be anything, but should occur in your available branches
