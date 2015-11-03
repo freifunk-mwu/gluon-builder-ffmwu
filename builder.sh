@@ -97,13 +97,13 @@ for COMMUNITY in $COMMUNITIES; do
     # available branches. Rewrites the manifest and creates symlinks for
     # each branch onto it: ./$branch.manifest -> ./manifest
     logp "unify manifest ($CALLBRANCH)"
-    $PYCMD "$UNIMANIFEST" -b "$CALLBRANCH" -m "$WORKINGDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
+    $PYCMD "$UNIMANIFEST" -b "$CALLBRANCH" -m "$WORKINGDIR/output/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
 
     # Now the manifest is fixed, let's sign! Remember to increase the
     # 'good_signatures' by one in your siteconf if signing automatically.
     if [ -f "$SIGNKEY" ]; then
-        logp "signing ($SIGNKEY images/sysupgrade/$CALLBRANCH.manifest)"
-        $SIGNSCRIPT "$SIGNKEY" "$WORKINGDIR/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
+        logp "signing ($SIGNKEY output/images/sysupgrade/$CALLBRANCH.manifest)"
+        $SIGNSCRIPT "$SIGNKEY" "$WORKINGDIR/output/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
     else
         logp "skipping sign, no key found ($SIGNKEY)"
     fi
@@ -111,11 +111,11 @@ for COMMUNITY in $COMMUNITIES; do
     # The info file is a json containing a mapping of router models matching
     # image-file names. So let's store the checksums alongside.
     logp "generating info.json"
-    $PYCMD "$GENINFO" -i "$WORKINGDIR/images" -c "$SHASCRIPT" --start "$BUILDSTART" --finish "$(date +%s)" 2>&1 | $LOG
+    $PYCMD "$GENINFO" -i "$WORKINGDIR/output/images" -c "$SHASCRIPT" --start "$BUILDSTART" --finish "$(date +%s)" 2>&1 | $LOG
 
     # Provide own checksum files of both factory and sysupgrade images
     logp "getting checksums ($CHECKSUMS)"
-    for g in images/*/*; do echo "$($SHASCRIPT "$g") $g" >> "$CHECKSUMS"; done
+    for g in output/images/*/*; do echo "$($SHASCRIPT "$g") $g" >> "$CHECKSUMS"; done
     # Sign them
     if [ -f "$SIGNKEY" ]; then
         logp "signing ($SIGNKEY $CHECKSUMS)"
@@ -125,7 +125,7 @@ for COMMUNITY in $COMMUNITIES; do
     # Move freshly built images into the library and copy metadata from stagedir
     logp "move images into library ($LIBRARYDIR/$COMMUNITY)"
     mkdir -p "$LIBRARYDIR/$COMMUNITY" 2>&1 | $LOG
-    cp -rv "$WORKINGDIR/images/." "$LIBRARYDIR/$COMMUNITY/" 2>&1 | $LOG
+    cp -rv "$WORKINGDIR/output/." "$LIBRARYDIR/$COMMUNITY/" 2>&1 | $LOG
 
     # Because we are building multiple communities the configuration differs.
     # For us, it is machine created, so store the results as well.
