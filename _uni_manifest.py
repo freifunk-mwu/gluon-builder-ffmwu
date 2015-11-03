@@ -24,7 +24,7 @@ def uni_manifest(branch, manifest):
     if manifest_content and manifest_content.count('BRANCH=') == 1:
 
         uni_branch = '\n'.join(
-            'BRANCH=%s' % (branch) for branch in sorted(
+            'BRANCH=%s' % (avail) for avail in sorted(
                 settings['common']['branches']['avail'].keys()
             )
         )
@@ -38,9 +38,9 @@ def uni_manifest(branch, manifest):
             append=False
         )
 
-        for branch in settings['common']['branches']['avail'].keys():
+        for avail in settings['common']['branches']['avail'].keys():
             manifest_link = manifest.replace(
-                '%s.manifest' % (branch), '%s.manifest' % (branch)
+                '%s.manifest' % (branch), '%s.manifest' % (avail)
             )
 
             change_location(manifest_link, False, move=True)
