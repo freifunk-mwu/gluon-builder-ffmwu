@@ -122,10 +122,14 @@ for COMMUNITY in $COMMUNITIES; do
         $SIGNSCRIPT "$SIGNKEY" "$CHECKSUMS" 2>&1 | $LOG
     fi
 
+    mkdir -p "$LIBRARYDIR/$COMMUNITY/modules" 2>&1 | $LOG
     # Move freshly built images into the library and copy metadata from stagedir
     logp "move images into library ($LIBRARYDIR/$COMMUNITY)"
-    mkdir -p "$LIBRARYDIR/$COMMUNITY" 2>&1 | $LOG
-    cp -rv "$WORKINGDIR/output/." "$LIBRARYDIR/$COMMUNITY/" 2>&1 | $LOG
+    cp -rv "$WORKINGDIR/output/images/." "$LIBRARYDIR/$COMMUNITY/" 2>&1 | $LOG
+
+    # Move freshly built modules alongside the images in the library
+    logp "move modules into library ($LIBRARYDIR/$COMMUNITY/modules)"
+    cp -rv "$WORKINGDIR/output/modules/"*"/." "$LIBRARYDIR/$COMMUNITY/modules/" 2>&1 | $LOG
 
     # Because we are building multiple communities the configuration differs.
     # For us, it is machine created, so store the results as well.
