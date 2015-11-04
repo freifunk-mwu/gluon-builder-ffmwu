@@ -97,7 +97,7 @@ for COMMUNITY in $COMMUNITIES; do
     # available branches. Rewrites the manifest and creates symlinks for
     # each branch onto it: ./$branch.manifest -> ./manifest
     logp "unify manifest ($CALLBRANCH)"
-    $PYCMD "$UNIMANIFEST" -b "$CALLBRANCH" -m "$WORKINGDIR/output/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
+    $PYCMD "$UNIMANIFEST" --branch "$CALLBRANCH" --manifest "$WORKINGDIR/output/images/sysupgrade/$CALLBRANCH.manifest" 2>&1 | $LOG
 
     # Now the manifest is fixed, let's sign! Remember to increase the
     # 'good_signatures' by one in your siteconf if signing automatically.
@@ -111,7 +111,7 @@ for COMMUNITY in $COMMUNITIES; do
     # The info file is a json containing a mapping of router models matching
     # image-file names. So let's store the checksums alongside.
     logp "generating info.json"
-    $PYCMD "$GENINFO" -i "$WORKINGDIR/output/images" -c "$SHASCRIPT" --start "$BUILDSTART" --finish "$(date +%s)" 2>&1 | $LOG
+    $PYCMD "$GENINFO" --images "$WORKINGDIR/output/images" --ccmd "$SHASCRIPT" --start "$BUILDSTART" --finish "$(date +%s)" 2>&1 | $LOG
 
     # Provide own checksum files of both factory and sysupgrade images
     logp "getting checksums ($CHECKSUMS)"
@@ -145,10 +145,10 @@ for COMMUNITY in $COMMUNITIES; do
 done
 
 # Set symlinks to the fresh release for the autoupdater.
-$PYCMD "$PUBLISH" "$LIBRARYDIR" -b "$CALLBRANCH"
+$PYCMD "$PUBLISH" "$LIBRARYDIR" --branch "$CALLBRANCH"
 
 # Clean up afterwards.
-rm -rf "$STAGEDIR" "$BUILDDIR"
+rm -rfv "$STAGEDIR" "$BUILDDIR"
 
 echo "~ finished"
 exit 0
