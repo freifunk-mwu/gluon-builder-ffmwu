@@ -58,21 +58,20 @@ for COMMUNITY in $COMMUNITIES; do
         $PYCMD "$BUILDLOGGER" "${COMMUNITY}_$RELEASE ~ $*" 2>&1 | $LOG
     }
 
+    function patch_ati_pata {
+        X86_ARC=$1
+        PATCHSTR="CONFIG_PATA_ATIIXP=y"
+        for PATCH in "$WORKINGDIR/openwrt/target/linux/x86/$X86_ARC/config-"*; do
+            logp "patching target x86-$X86_ARC for ati pata support ($PATCH)"
+            grep "$PATCHSTR" "$PATCH" || echo "$PATCHSTR" >> "$PATCH"
+        done
+    }
+
     # To boldly go where no man has gone before
     cd "$WORKINGDIR"
 
     logp "make update"
     $MKCMD update 2>&1 | $LOG
-
-    # Patch OpenWRT Sources
-    for X86_ARC in "generic" "64"; do
-        if [[ "$TARGETS" == *"x86-$X86_ARC"* ]]; then
-            for PATCH in "$WORKINGDIR/openwrt/target/linux/x86/$X86_ARC/config-"*; do
-                logp "patching target x86-$X86_ARC for ati pata support ($PATCH)"
-                echo "CONFIG_PATA_ATIIXP=y" >> "$PATCH"
-            done
-        fi
-    done
 
     # BUILDBRANCH is set in the defaults (['common']['branches']['build']),
     # it could be anything, but should occur in your available branches
@@ -85,6 +84,10 @@ for COMMUNITY in $COMMUNITIES; do
     # user will auto update to the next 'stable' Release, unless the
     # autoupdater settings on the node are changed.
     for BUILDTARGET in $TARGETS; do
+        # Patch OpenWRT Sources
+        if [ "$BUILDTARGET" == "x86-generic" ]; then patch_ati_pata "generic"; fi
+        if [ "$BUILDTARGET" == "x86-64" ]; then patch_ati_pata "64"; fi
+
         logp "make images (GLUON_TARGET=$BUILDTARGET GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE BROKEN=$BROKEN)"
         $MKCMD GLUON_BRANCH="$BUILDBRANCH" GLUON_RELEASE="$RELEASE" GLUON_TARGET="$BUILDTARGET" BROKEN="$BROKEN" 2>&1 | $LOG
     done

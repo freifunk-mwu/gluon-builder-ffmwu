@@ -22,6 +22,7 @@ common:
         - 'x86-64'
         - 'x86-generic'
         - 'x86-kvm_guest'
+        - 'x86-xen_domu'
 gluon:
     local:
         dir: &LOCAL_DIR !loc_join ['home_dir', 'gluon_builder']
@@ -36,7 +37,7 @@ site:
     remote: 'https://github.com/freifunk-mwu/site-ffmwu.git'
 publish:
     autosign_key: !loc_join ['home_dir', '.ecdsa', !str_join ['hostname', '.prv']]
-    http_root_dir: &HTTP_DIR !loc_join ['/var/www/html']
+    http_root_dir: &HTTP_DIR '/var/www/html'
     archive_dir: !loc_join [*HTTP_DIR, '_archive']
     http_fw_dir: &HTTPFW_DIR !loc_join [*HTTP_DIR, 'firmware']
     library_dir: !loc_join [*HTTPFW_DIR, '_library']
