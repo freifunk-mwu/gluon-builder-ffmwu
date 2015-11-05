@@ -125,14 +125,14 @@ for COMMUNITY in $COMMUNITIES; do
         $SIGNSCRIPT "$SIGNKEY" "$CHECKSUMS" 2>&1 | $LOG
     fi
 
-    mkdir -p "$LIBRARYDIR/$COMMUNITY/modules" 2>&1 | $LOG
-    # Move freshly built images into the library and copy metadata from stagedir
-    logp "move images into library ($LIBRARYDIR/$COMMUNITY)"
-    cp -rv "$WORKINGDIR/output/images/." "$LIBRARYDIR/$COMMUNITY/" 2>&1 | $LOG
+    mkdir -p "$STAGEDIR/$COMMUNITY/modules" 2>&1 | $LOG
+    # Move freshly built images into the stagedir
+    logp "move images into stagedir ($STAGEDIR/$COMMUNITY)"
+    cp -rv "$WORKINGDIR/output/images/." "$STAGEDIR/$COMMUNITY/" 2>&1 | $LOG
 
-    # Move freshly built modules alongside the images in the library
-    logp "move modules into library ($LIBRARYDIR/$COMMUNITY/modules)"
-    cp -rv "$WORKINGDIR/output/modules/"*"/." "$LIBRARYDIR/$COMMUNITY/modules/" 2>&1 | $LOG
+    # Move freshly built modules alongside the images in the stagedir
+    logp "move modules into stagedir ($STAGEDIR/$COMMUNITY/modules)"
+    cp -rv "$WORKINGDIR/output/modules/"*"/." "$STAGEDIR/$COMMUNITY/modules/" 2>&1 | $LOG
 
     # Because we are building multiple communities the configuration differs.
     # For us, it is machine created, so store the results as well.
@@ -142,10 +142,11 @@ for COMMUNITY in $COMMUNITIES; do
     logp "compress logfile, bye"
     gzip "$LOGFILE"
 
-    # Last, copy the stagedir.
-    cp -rv "$STAGEDIR/." "$LIBRARYDIR"
-
 done
+
+mkdir -p "$LIBRARYDIR"
+# Copy the stagedir into the library
+cp -rv "$STAGEDIR/." "$LIBRARYDIR"
 
 # Set symlinks to the fresh release for the autoupdater.
 $PYCMD "$PUBLISH" "$LIBRARYDIR" --branch "$CALLBRANCH"
