@@ -62,8 +62,10 @@ for COMMUNITY in $COMMUNITIES; do
         X86_ARC=$1
         PATCHSTR="CONFIG_PATA_ATIIXP=y"
         for PATCH in "$WORKINGDIR/openwrt/target/linux/x86/$X86_ARC/config-"*; do
-            logp "patching target x86-$X86_ARC for ati pata support ($PATCH)"
-            grep "$PATCHSTR" "$PATCH" || echo "$PATCHSTR" >> "$PATCH"
+            if [ -f "$PATCH" ]; then
+                logp "patching target x86-$X86_ARC for ati pata support ($PATCH)"
+                grep "$PATCHSTR" "$PATCH" || echo "$PATCHSTR" >> "$PATCH"
+            fi
         done
     }
 
