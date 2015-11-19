@@ -2,12 +2,6 @@
 Gluon Builder Documentation
 ===========================
 
-.. image:: _static/photon_builder.png
-    :scale: 15%
-    :align: right
-    :alt: gluon builder logo, not a brick trowel with a moustache
-
-
 Welcome to the Gluon Builder Documentation!
 
 |
