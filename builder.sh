@@ -87,7 +87,6 @@ for COMMUNITY in $COMMUNITIES; do
     # autoupdater settings on the node are changed.
     for BUILDTARGET in $TARGETS; do
         # Patch OpenWRT Sources
-        if [ "$BUILDTARGET" == "x86-generic" ]; then patch_ati_pata "generic"; fi
         if [ "$BUILDTARGET" == "x86-64" ]; then patch_ati_pata "64"; fi
 
         logp "make images (GLUON_TARGET=$BUILDTARGET GLUON_BRANCH=$BUILDBRANCH GLUON_RELEASE=$RELEASE BROKEN=$BROKEN)"
