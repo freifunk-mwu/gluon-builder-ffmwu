@@ -14,10 +14,12 @@ common:
     pycmd: 'python3'
     targets:
         - 'ar71xx-generic'
+        - 'ar71xx-mikrotik'
         - 'ar71xx-nand'
         - 'brcm2708-bcm2708'
         - 'brcm2708-bcm2709'
         - 'mpc85xx-generic'
+        - 'ramips-mt7621'
         - 'sunxi'
         - 'x86-64'
         - 'x86-generic'
