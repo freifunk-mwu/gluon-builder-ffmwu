@@ -1,3 +1,7 @@
+DEPRECATED
+==========
+
+This gluon builder is deprecated. We use the build-scripts in https://github.com/freifunk-mwu/sites-ffmwu instead.
 
 gluon-builder-ffmwu
 -------------------
